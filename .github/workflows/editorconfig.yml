@@ -1,0 +1,37 @@
+name: EditorConfig
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  editorconfig:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: editorconfig-checker/action-editorconfig-checker@v3.0.0
+        with:
+          version: v4.0.2
+
+      - name: Fix EditorConfig violations
+        if: github.event_name != 'pull_request'
+        continue-on-error: true
+        run: editorconfig-checker --fix
+
+      - name: Commit fixes
+        if: github.event_name != 'pull_request'
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "style: apply EditorConfig fixes"
+          branch: ${{ github.ref_name }}
+
+      - name: Check EditorConfig rules
+        run: editorconfig-checker
