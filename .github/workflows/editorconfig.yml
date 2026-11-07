@@ -34,4 +34,4 @@ jobs:
           branch: ${{ github.ref_name }}
 
       - name: Check EditorConfig rules
-        run: editorconfig-checker
+        run: editorconfig-checker --format github-actions
