@@ -1,0 +1,56 @@
+/*
+ * `test` не выведется, так как
+ * в файле объявлена функция main()
+ * а этот комментарий будет вырезан
+ */
+println("test");
+// и этот комментарий тоже
+
+int count = 0;
+
+def read_numbers() -> int[] {
+    count = input_int();
+    if (count <= 0) {
+        return new int[0];
+    }
+    int[] numbers = new int[count];
+    int i = 0;
+    while (i < count) {
+        numbers[i] = input_int();
+        i += 1;
+    }
+    return numbers;
+}
+
+def bubble_sort(int[] a) {
+    int n = len(a);
+    int i = 0;
+    while (i < n) {
+        int j = 0;
+        while (j < n - 1 - i) {
+            if (a[j] > a[j + 1]) {
+                int temp = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = temp;
+            }
+            j += 1;
+        }
+        i += 1;
+    }
+}
+
+def print_numbers(int[] a) {
+    int n = len(a);
+    int i = 0;
+    while (i < n) {
+        println(a[i]);
+        i += 1;
+    }
+}
+
+def main() -> int {
+    int[] numbers = read_numbers();
+    bubble_sort(numbers);
+    print_numbers(numbers);
+    return 0;
+}

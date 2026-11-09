@@ -1,0 +1,18 @@
+int count = input_int();
+
+if (count <= 0) {
+    println(-1);
+} else {
+    int i = 0;
+    while (i < count) {
+        int base = input_int();
+        int exp = input_int();
+
+        if (exp < 0) {
+            println(-1);
+        } else {
+            println(base ** exp);
+        }
+        i = i + 1;
+    }
+}

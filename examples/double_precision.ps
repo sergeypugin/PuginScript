@@ -1,0 +1,71 @@
+/*
+ * 64-bit arithmetic demonstration (A + B, A - B)
+ * 64-bit numbers are represented as arrays int[2]: [hi, lo]
+ *
+ * Ranges:
+ * 32-bit signed: -2_147_483_648 to 2_147_483_647
+ * 64-bit signed: -9_223_372_036_854_775_808 to 9_223_372_036_854_775_807
+ */
+
+def print64(int[] val) {
+    print(val[0]);
+    print(" ");
+    println(val[1]);
+}
+
+def add64(int[] a, int[] b) -> int[] {
+    int[] res = new int[2];
+    res[1] = a[1] + b[1];
+    res[0] = a[0] + b[0];
+
+    bool carry = false;
+    if (a[1] < 0) {
+        if ((b[1] < 0) | (res[1] >= 0)) carry = true;
+    } else if ((b[1] < 0) & (res[1] >= 0)) {
+        carry = true;
+    }
+
+    if (carry) res[0] += 1;
+    return res;
+}
+
+def sub64(int[] a, int[] b) -> int[] {
+    int[] res = new int[2];
+    res[1] = a[1] - b[1];
+    res[0] = a[0] - b[0];
+
+    bool borrow = false;
+    if (a[1] >= 0) {
+        if ((b[1] < 0) | (a[1] < b[1])) borrow = true;
+    } else if ((b[1] < 0) & (a[1] < b[1])) {
+        borrow = true;
+    }
+
+    if (borrow) res[0] -= 1;
+    return res;
+}
+
+def main() -> int {
+    println("64-bit arithmetic example\n");
+    println("32-bit range: -2_147_483_648 to 2_147_483_647");
+    println("64-bit range: -9_223_372_036_854_775_808 to 9_223_372_036_854_775_807");
+    println();
+
+    int[] a = new int[2];
+    int[] b = new int[2];
+
+    println("Enter A (high then low):");
+    a[0] = input_int();
+    a[1] = input_int();
+    println("Enter B (high then low):");
+    b[0] = input_int();
+    b[1] = input_int();
+
+    println("Sum:");
+    print64(add64(a, b));
+
+    println("Diff:");
+    print64(sub64(a, b));
+
+    return 0;
+}
