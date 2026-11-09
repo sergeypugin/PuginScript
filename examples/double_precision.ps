@@ -7,10 +7,8 @@
  * 64-bit signed: -9_223_372_036_854_775_808 to 9_223_372_036_854_775_807
  */
 
-def print64(int[] val) {
-    print(val[0]);
-    print(" ");
-    println(val[1]);
+def print64(str label, int[] val) {
+    println(label + val[0] + " " + val[1]);
 }
 
 def add64(int[] a, int[] b) -> int[] {
@@ -45,7 +43,7 @@ def sub64(int[] a, int[] b) -> int[] {
     return res;
 }
 
-def main() -> int {
+def main() {
     println("64-bit arithmetic example\n");
     println("32-bit range: -2_147_483_648 to 2_147_483_647");
     println("64-bit range: -9_223_372_036_854_775_808 to 9_223_372_036_854_775_807");
@@ -61,11 +59,6 @@ def main() -> int {
     b[0] = input_int();
     b[1] = input_int();
 
-    println("Sum:");
-    print64(add64(a, b));
-
-    println("Diff:");
-    print64(sub64(a, b));
-
-    return 0;
+    print64("Sum: ", add64(a, b));
+    print64("Diff: ", sub64(a, b));
 }
