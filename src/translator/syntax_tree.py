@@ -225,7 +225,7 @@ class Sexp:
     """Узел для вывода S-выражений: atoms идут после головы, subs -- дочерние узлы"""
 
     head: str
-    atoms: list[str] = field(default_factory=list[str])
+    atoms: list[str] = field(default_factory=lambda: list[str]())
     subs: list[Sexp] = field(default_factory=lambda: list[Sexp]())
 
 
