@@ -1,4 +1,11 @@
-println("Enter two strings:");
+/*
+Демонстрация сравнения на равенство:
+- int и str сравниваются
+- сравнение массивов семантикой не поддерживается
+  (транслятор должен словить ошибку и сообщить о ней
+  на этапе семантической проверки)
+*/
+println("Enter two integers:");
 print("First: ");  int first_number = input_int();
 print("Second: "); int second_number = input_int();
 bool same_numbers = first_number == second_number;
