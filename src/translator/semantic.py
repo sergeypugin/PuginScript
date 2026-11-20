@@ -432,10 +432,52 @@ class _Checker:
                 )
         return expected
 
+    def _constant_int_value(self, e: Expr, scope: Scope) -> int | None:
+        if isinstance(e, IntegerLiteral):
+            return e.value
+        if isinstance(e, CharLiteral):
+            return e.code
+        if isinstance(e, Identifier):
+            symbol = scope.resolve(e.name)
+            if isinstance(symbol, ConstSymbol) and symbol.type == INT:
+                return int(symbol.value)
+            return None
+        if isinstance(e, Unary) and e.op == "-":
+            value = self._constant_int_value(e.operand, scope)
+            return None if value is None else _wrap32(-value)
+        if not isinstance(e, Binary) or e.op not in ("+", "-", "*", "/", "%", "**"):
+            return None
+        left = self._constant_int_value(e.left, scope)
+        right = self._constant_int_value(e.right, scope)
+        if left is None or right is None:
+            return None
+        if e.op == "+":
+            return _wrap32(left + right)
+        if e.op == "-":
+            return _wrap32(left - right)
+        if e.op == "*":
+            return _wrap32(left * right)
+        if e.op == "/" or e.op == "%":
+            if right == 0:
+                return None
+            if e.op == "/":
+                return _wrap32(_div_trunc(left, right))
+            return _wrap32(_mod_trunc(left, right))
+        if e.op == "**":
+            if right < 0:
+                return None
+            return _pow32(left, right)
+        return None
+
     def _new(self, e: New, scope: Scope) -> Type | None:
         size = self._expr(e.size, scope, INT)
-        if size is not None and size != INT:
-            self._error(e.size.location, f"размер массива должен быть int, получен {size}")
+        if size is not None:
+            if size == INT:
+                constant_size = self._constant_int_value(e.size, scope)
+                if constant_size is not None and constant_size < 0:
+                    self._error(e.size.location, "размер массива не может быть отрицательным")
+            else:
+                self._error(e.size.location, f"размер массива должен быть int, получен {size}")
         return Type(e.base, True)
 
     def _index(self, e: Index, scope: Scope) -> Type | None:
