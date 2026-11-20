@@ -1,6 +1,9 @@
-int char = input_char();
-
-while (char != -1) {
+/*
+cat: печатает ввод как есть.
+Момент остановки находит не программа: при исчерпании входного буфера
+модель процессора останавливает моделирование (вариант stream).
+*/
+while (true) {
+    int char = input_char();
     print_char(char);
-    char = input_char();
 }
