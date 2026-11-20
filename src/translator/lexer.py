@@ -346,7 +346,7 @@ def lex(text: str, file_name: str) -> list[Token]:
 if __name__ == "__main__":
     sample = (
 """
-include "constants.ps";
+include "constants.h";
 const int trash = 1_234;
 def main() -> int {
     str greeting = "Hello, \\t\\"my friend!\\0";
