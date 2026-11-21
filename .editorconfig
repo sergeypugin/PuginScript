@@ -6,6 +6,6 @@ charset = utf-8
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{ps,py}]
+[*.{py,ps,h}]
 indent_style = space
 indent_size = 4
