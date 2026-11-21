@@ -27,8 +27,10 @@ def test_ast_basic_shapes() -> None:
 
 @pytest.mark.parametrize("path", _EXAMPLE_PATHS, ids=[path.stem for path in _EXAMPLE_PATHS])
 def test_ast_matches_golden(path: Path) -> None:
-    expected = (_AST_GOLDEN / f"{path.stem}.sexp").read_text(encoding="utf-8").rstrip("\n")
-    assert dump(parse(str(path))) == expected, path.name
+    golden_path = _AST_GOLDEN / f"{path.stem}.sexp"
+    expected = golden_path.read_text(encoding="utf-8")
+    assert expected.endswith("\n"), f"{golden_path} must end with a newline"
+    assert dump(parse(str(path))) + "\n" == expected, path.name
 
 
 def test_precedence_and_power_associativity() -> None:
