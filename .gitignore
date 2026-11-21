@@ -1,2 +1,9 @@
+# для своих целей
 _ignore
+
+# Python
 __pycache__/
+.pytest_cache/
+
+# MetaData
+*.egg-info/
