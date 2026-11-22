@@ -1,7 +1,5 @@
 """AST PuginScript и его Lisp-подобный вывод в форме S-выражений"""
 
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 
 BASE_TYPES = ("int", "bool", "str")

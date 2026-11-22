@@ -7,8 +7,6 @@ Include подставляется на месте директивы: влож�
 ошибка останавливает трансляцию
 """
 
-from __future__ import annotations
-
 import os
 from collections.abc import Callable
 from typing import NoReturn

@@ -1,7 +1,5 @@
 """Общая ошибка трансляции с привязкой к месту в исходнике"""
 
-from __future__ import annotations
-
 from .syntax_tree import SourceLocation
 
 
