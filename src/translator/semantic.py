@@ -119,7 +119,7 @@ class ConstSymbol:
     value: int | bool | str
 
 
-@dataclass
+@dataclass(eq=False)
 class VarSymbol:
     name: str
     type: Type
@@ -171,6 +171,7 @@ class _Checker:
         self.globals = Scope()
         self.script = Scope(self.globals)
         self._func: FunctionDecl | None = None
+        self._initialized_vars: set[VarSymbol] = set()
         for name in _BUILTINS:
             self.globals.declare(
                 FuncSymbol(name=name, params=[], return_type=None, builtin=True)
@@ -219,8 +220,16 @@ class _Checker:
             if not scope.declare(VarSymbol(p.name, p.param_type)):
                 self._error(p.location, f"повторное объявление параметра '{p.name}'")
         self._func = d
+        previous_initialized = self._initialized_vars
+        initialized: set[VarSymbol] = set()
+        for p in d.params:
+            symbol = scope.resolve(p.name)
+            if isinstance(symbol, VarSymbol):
+                initialized.add(symbol)
+        self._initialized_vars = initialized
         for stmt in d.body.body:
             self._stmt(stmt, scope)
+        self._initialized_vars = previous_initialized
         self._func = None
         if d.return_type is not None and not self._returns_always(d.body):
             self._error(
@@ -274,15 +283,25 @@ class _Checker:
 
     def _if(self, s: IfStmt, scope: Scope) -> None:
         self._condition(s.condition, scope)
+        before = self._initialized_vars.copy()
         self._block(s.then_body, scope)
+        then_initialized = self._initialized_vars.copy()
         if isinstance(s.else_body, Block):
+            self._initialized_vars = before.copy()
             self._block(s.else_body, scope)
+            self._initialized_vars.intersection_update(then_initialized)
         elif isinstance(s.else_body, IfStmt):
+            self._initialized_vars = before.copy()
             self._if(s.else_body, scope)
+            self._initialized_vars.intersection_update(then_initialized)
+        else:
+            self._initialized_vars.intersection_update(before)
 
     def _while(self, s: WhileStmt, scope: Scope) -> None:
         self._condition(s.condition, scope)
+        before = self._initialized_vars.copy()
         self._block(s.body, scope)
+        self._initialized_vars = before
 
     def _condition(self, expr: Expr, scope: Scope) -> None:
         t = self._expr(expr, scope)
@@ -335,6 +354,7 @@ class _Checker:
             return
         target = sym.type
         if s.target.index is not None:
+            self._read_var(s.target.name, sym, s.target.location)
             if target == STR:
                 self._error(s.target.location, "строку нельзя изменять по индексу")
                 return
@@ -349,7 +369,10 @@ class _Checker:
             got = self._expr(s.value, scope, target)
             if got is not None and got != target:
                 self._error(s.value.location, f"присваивание: ожидался {target}, получен {got}")
+            if s.target.index is None:
+                self._initialized_vars.add(sym)
             return
+        self._read_var(s.target.name, sym, s.target.location)
         if target != INT:
             self._error(s.target.location, f"операция '{s.op}' определена только для int")
             return
@@ -370,8 +393,11 @@ class _Checker:
                 self._error(
                     d.location, f"инициализатор '{d.name}': ожидался {d.var_type}, получен {init}"
                 )
-        if not scope.declare(VarSymbol(d.name, d.var_type)):
+        symbol = VarSymbol(d.name, d.var_type)
+        if not scope.declare(symbol):
             self._error(d.location, f"повторное объявление '{d.name}' в одной области видимости")
+        elif d.init is not None:
+            self._initialized_vars.add(symbol)
 
     def _expr(self, e: Expr, scope: Scope, expected: Type | None = None) -> Type | None:
         if isinstance(e, IntegerLiteral):
@@ -398,12 +424,19 @@ class _Checker:
             return self._binary(e, scope)
         raise TypeError("unknown expression: " + type(e).__name__)
 
+    def _read_var(self, name: str, symbol: VarSymbol, location: SourceLocation) -> None:
+        if symbol not in self._initialized_vars:
+            self._error(location, f"переменная '{name}' не инициализирована")
+
     def _ident(self, e: Identifier, scope: Scope) -> Type | None:
         sym = scope.resolve(e.name)
         if sym is None:
             self._error(e.location, f"неизвестное имя '{e.name}'")
             return None
-        if isinstance(sym, (VarSymbol, ConstSymbol)):
+        if isinstance(sym, VarSymbol):
+            self._read_var(e.name, sym, e.location)
+            return sym.type
+        if isinstance(sym, ConstSymbol):
             return sym.type
         self._error(e.location, f"функция '{e.name}' использована как значение")
         return None

@@ -82,6 +82,30 @@ def test_array_size_boundaries() -> None:
     assert _errors("int n = input_int(); int[] a = new int[n];") == []
 
 
+def test_uninitialized_variables() -> None:
+    cases = [
+        ("int value; println(value);", "переменная 'value' не инициализирована"),
+        ("int value; value = 1; println(value);", None),
+        ("def f(int value) -> int { return value; }", None),
+        (
+            "int value; if (true) { value = 1; } println(value);",
+            "переменная 'value' не инициализирована",
+        ),
+        ("int value; if (true) { value = 1; } else { value = 2; } println(value);", None),
+        (
+            "int value; while (false) { value = 1; } println(value);",
+            "переменная 'value' не инициализирована",
+        ),
+        ("int value; value += 1;", "переменная 'value' не инициализирована"),
+    ]
+    for source, expected in cases:
+        errors = _errors(source)
+        if expected is None:
+            assert errors == [], source
+        else:
+            assert expected in errors, source
+
+
 def test_semantic_collects_independent_errors() -> None:
     assert len(_errors("foo(); bar();")) == 2
     assert len(_errors("bool a = 1; bool b = 2;")) == 2
