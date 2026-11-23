@@ -736,8 +736,3 @@ class RuntimeHelpers:
         for name in self._ORDER:
             if name in self._needed:
                 self._emit_helper(name)
-
-    def clear(self) -> None:
-        """Сбрасывает состояние перед повторной генерацией тем же объектом."""
-        self._needed.clear()
-        self._emitted.clear()
