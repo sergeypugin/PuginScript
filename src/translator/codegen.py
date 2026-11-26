@@ -917,27 +917,31 @@ class Codegen:
         return result_reg
 
     def _compile_builtin(self, call: Call) -> int:
-
+        # result_reg выделяется последним: он не нужен во время вызова, поэтому не
+        # попадает в save/restore и не сдвигает номера регистров аргументов
         name = call.name
         args = call.args
-        result_reg = self._alloc_temp()
 
         if name == "print_char":
             if not args:
+                result_reg = self._alloc_temp()
                 self._emit_mv(result_reg, ZERO)
                 return result_reg
             reg = self._compile_expr(args[0])
             self._emit_out(reg, 1)
             self._free_temp(reg)
+            result_reg = self._alloc_temp()
             self._emit_mv(result_reg, ZERO)
             return result_reg
 
         if name == "input_char":
+            result_reg = self._alloc_temp()
             self._emit_in(result_reg, 0)
             return result_reg
 
         if name == "len":
             if not args:
+                result_reg = self._alloc_temp()
                 self._emit_mv(result_reg, ZERO)
                 return result_reg
             arg_type = self._expr_type(args[0])
@@ -950,6 +954,7 @@ class Codegen:
                 self._emit_jal("rt_len")
             self._restore_temps(saved)
             self._free_temp(reg)
+            result_reg = self._alloc_temp()
             self._emit_mv(result_reg, RESULT_REG)
             return result_reg
 
@@ -960,6 +965,7 @@ class Codegen:
                     self._emit_addi(newline, ZERO, 10)
                     self._emit_out(newline, 1)
                     self._free_temp(newline)
+                result_reg = self._alloc_temp()
                 self._emit_mv(result_reg, ZERO)
                 return result_reg
             reg = self._compile_expr(args[0])
@@ -974,6 +980,7 @@ class Codegen:
                 self._emit_jal("rt_println_int" if name == "println" else "rt_print_int")
             self._restore_temps(saved)
             self._free_temp(reg)
+            result_reg = self._alloc_temp()
             self._emit_mv(result_reg, ZERO)
             return result_reg
 
@@ -981,6 +988,7 @@ class Codegen:
             saved = self._save_temps()
             self._emit_jal("rt_input")
             self._restore_temps(saved)
+            result_reg = self._alloc_temp()
             self._emit_mv(result_reg, RESULT_REG)
             return result_reg
 
@@ -988,6 +996,7 @@ class Codegen:
             saved = self._save_temps()
             self._emit_jal("rt_input_int")
             self._restore_temps(saved)
+            result_reg = self._alloc_temp()
             self._emit_mv(result_reg, RESULT_REG)
             return result_reg
 
@@ -996,6 +1005,7 @@ class Codegen:
             r = self._compile_expr(arg)
             self._free_temp(r)
         self._emit_trap(0)
+        result_reg = self._alloc_temp()
         self._emit_mv(result_reg, ZERO)
         return result_reg
 
