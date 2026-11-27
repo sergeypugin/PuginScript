@@ -92,3 +92,16 @@ def test_include_and_parser_errors(tmp_path: Path) -> None:
         assert error.message == "файл 'first.ps' уже включён"
     else:
         raise AssertionError("ожидалась ошибка циклического include")
+
+
+def test_deep_nesting_reports_translator_error() -> None:
+    source = "def main() -> int { int x = " + "(" * 100 + "1" + ")" * 100 + "; return 0; }"
+    with pytest.raises(TranslatorError) as exc_info:
+        parse_text(source, "deep.ps")
+    assert "глубин" in exc_info.value.message
+
+
+def test_moderate_nesting_still_parses() -> None:
+    source = "def main() -> int { int x = " + "(" * 10 + "1" + ")" * 10 + "; return 0; }"
+    program = parse_text(source, "deep.ps")
+    assert isinstance(program, Program)

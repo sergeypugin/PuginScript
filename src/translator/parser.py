@@ -46,6 +46,12 @@ from .syntax_tree import (
 )
 
 _OR_OPS: dict[TokenKind, str] = {TokenKind.OR: "|"}
+
+# Живая рекурсивная цепочка на один уровень вложенности -- ~12 кадров Python
+# (от _expression до _primary), 64 уровня дают ~770 кадров: наш лимит
+# срабатывает раньше дефолтного лимита интерпретатора (1000)
+MAX_PARSE_DEPTH = 64
+
 _AND_OPS: dict[TokenKind, str] = {TokenKind.AND: "&"}
 _COMPARE_OPS: dict[TokenKind, str] = {
     TokenKind.EQ: "==",
@@ -112,7 +118,7 @@ def _base_type_name(token: Token) -> str:
 def _read_source(path: str, location: SourceLocation) -> str:
     try:
         # utf-8-sig "прозрачно" съедает BOM (Byte Order Mark)
-        with open(path, "r", encoding="utf-8-sig") as source:
+        with open(path, encoding="utf-8-sig") as source:
             return source.read()
     except OSError:
         raise TranslatorError(location, f"не удалось открыть файл {path!r}") from None
@@ -126,6 +132,7 @@ class _FileParser:
         self._path = path
         self._included = included
         self._pos = 0
+        self._depth = 0
 
     def parse_program(self) -> Program:
         items: list[Decl | Stmt] = []
@@ -222,6 +229,15 @@ class _FileParser:
         return Type(base=base, is_array=is_array)
 
     def _statement(self) -> Stmt:
+        self._depth += 1
+        if self._depth > MAX_PARSE_DEPTH:
+            self._error(f"превышена максимальная глубина вложенности ({MAX_PARSE_DEPTH})")
+        try:
+            return self._statement_inner()
+        finally:
+            self._depth -= 1
+
+    def _statement_inner(self) -> Stmt:
         kind = self._peek().kind
         if kind in _BASE_TYPES:
             return self._var_decl()
@@ -332,7 +348,13 @@ class _FileParser:
             left = Binary(op=op, left=left, right=operand(), location=token.location)
 
     def _expression(self) -> Expr:
-        return self._binary_level(_OR_OPS, self._and)
+        self._depth += 1
+        if self._depth > MAX_PARSE_DEPTH:
+            self._error(f"превышена максимальная глубина вложенности ({MAX_PARSE_DEPTH})")
+        try:
+            return self._binary_level(_OR_OPS, self._and)
+        finally:
+            self._depth -= 1
 
     def _and(self) -> Expr:
         return self._binary_level(_AND_OPS, self._comparison)
@@ -493,12 +515,24 @@ def parse(file_path: str) -> Program:
     path = os.path.normcase(os.path.abspath(file_path))
     text = _read_source(path, SourceLocation(file_path, 1, 0))
     included = {path}
-    return _FileParser(lex(text, path), path, included).parse_program()
+    try:
+        return _FileParser(lex(text, path), path, included).parse_program()
+    except RecursionError:
+        raise TranslatorError(
+            SourceLocation(file_path, 1, 0),
+            f"превышена максимальная глубина вложенности ({MAX_PARSE_DEPTH})",
+        ) from None
 
 
 def parse_text(text: str, file_name: str) -> Program:
     path = os.path.normcase(os.path.abspath(file_name))
-    return _FileParser(lex(text, path), path, {path}).parse_program()
+    try:
+        return _FileParser(lex(text, path), path, {path}).parse_program()
+    except RecursionError:
+        raise TranslatorError(
+            SourceLocation(file_name, 1, 0),
+            f"превышена максимальная глубина вложенности ({MAX_PARSE_DEPTH})",
+        ) from None
 
 
 if __name__ == "__main__":
