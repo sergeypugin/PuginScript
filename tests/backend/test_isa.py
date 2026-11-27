@@ -79,6 +79,21 @@ def test_in() -> None:
     assert encode(ins) == 0x5C800001
 
 
+def test_port_field_unsigned_for_in_and_out() -> None:
+    # поле Port беззнаковое в обеих командах PMIO; раньше in был знаковым,
+    # хотя out -- беззнаковым
+    assert encode(In(rd=4, port=40000)) == 0x5C809C40
+    assert encode(Out(rs=4, port=40000)) == 0x88809C40
+    for ins in (
+        In(rd=4, port=-1),
+        In(rd=4, port=65536),
+        Out(rs=4, port=-1),
+        Out(rs=4, port=65536),
+    ):
+        with pytest.raises(ISAError):
+            encode(ins)
+
+
 def test_out() -> None:
     ins = Out(rs=4, port=1)
     assert encode(ins) == 0x88800001

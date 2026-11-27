@@ -183,7 +183,7 @@ def encode(ins: Instruction) -> int:
         return (OPCODE["jr"] << OPCODE_SHIFT) | (_reg(ins.rs) << 16)
     if isinstance(ins, In):
         return (OPCODE["in"] << OPCODE_SHIFT) | (
-            (_reg(ins.rd) << 21) | _imm16(ins.port)
+            (_reg(ins.rd) << 21) | _imm16(ins.port, unsigned=True)
         )
     if isinstance(ins, Out):
         return (OPCODE["out"] << OPCODE_SHIFT) | (
