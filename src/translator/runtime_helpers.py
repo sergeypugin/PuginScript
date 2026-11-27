@@ -28,6 +28,7 @@ class RuntimeEmitter:
         getattr(self, f"_{name}")()
 
     def _helper_prologue(self: Any, name: str) -> None:
+        """Кадр runtime-хелпера: та же раскладка, что у обычных функций."""
         self._define_label(name)
         self._emit_addi(SP, SP, -8)
         self._emit_sw(FP, SP, 4)
@@ -35,6 +36,7 @@ class RuntimeEmitter:
         self._emit_addi(FP, SP, 4)
 
     def _helper_epilogue(self: Any) -> None:
+        """Симметричный снос кадра хелпера."""
         old_fp = self._alloc_temp()
         self._emit_lw(RA, FP, -4)
         self._emit_lw(old_fp, FP, 0)

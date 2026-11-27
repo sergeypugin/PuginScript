@@ -1,4 +1,4 @@
-"""AST PuginScript и его Lisp-подобный вывод в форме S-выражений"""
+"""AST PuginScript и его Lisp-подобный вывод в форме S-выражений."""
 
 from dataclasses import dataclass, field
 
@@ -220,7 +220,7 @@ def _lvalue(lv: LValue) -> str:
 
 @dataclass
 class Sexp:
-    """Узел для вывода S-выражений: atoms идут после головы, subs -- дочерние узлы"""
+    """Узел для вывода S-выражений: atoms идут после головы, subs -- дочерние узлы."""
 
     head: str
     atoms: list[str] = field(default_factory=lambda: list[str]())

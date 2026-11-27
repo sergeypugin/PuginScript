@@ -14,7 +14,7 @@
 - R9-R31 -- временные
 - jal -> R1, возврат jr R1
 - Пролог: addi SP, SP, -8; sw FP, 4(SP); sw RA, 0(SP); addi FP, SP, 4
-- Локальные переменные -- в кадре со смещениями от FP (отрицательные)
+- Локальные переменные -- в кадре со смещениями от FP (отрицательные).
 """
 
 from dataclasses import dataclass
@@ -401,7 +401,7 @@ class Codegen:
         if self.result.main is not None:
             self._emit_jal(f"func_{self.result.main.name}")
         else:
-            self._emit_jal("func___script")
+            self._emit_jal("script_func")
         self._emit_halt()
 
         if self.result.main is None:
@@ -456,7 +456,7 @@ class Codegen:
         self._func_slots[func_id] = slots
 
     def _compile_script(self) -> None:
-        self._define_label("func___script")
+        self._define_label("script_func")
         self._current_func_id = 0
 
         statements = [item for item in self.program.items if isinstance(item, Stmt)]
@@ -467,11 +467,8 @@ class Codegen:
         end_label = self._new_label("return_script")
         self._return_labels.append(end_label)
 
-        for item in self.program.items:
-            if isinstance(item, (ConstDecl, FunctionDecl)):
-                continue
-            if isinstance(item, Stmt):
-                self._compile_stmt(item)
+        for stmt in statements:
+            self._compile_stmt(stmt)
 
         self._emit_mv(RESULT_REG, ZERO)
         self._define_label(end_label)
@@ -512,6 +509,7 @@ class Codegen:
         self._emit_epilogue()
 
     def _emit_prologue(self, local_bytes: int) -> None:
+        """Собирает кадр: сохраняет FP и RA, переносит базу на FP, отводит место под локальные."""
         self._emit_addi(SP, SP, -8)
         self._emit_sw(FP, SP, 4)
         self._emit_sw(RA, SP, 0)
@@ -520,6 +518,7 @@ class Codegen:
             self._emit_addi(SP, SP, -local_bytes)
 
     def _emit_epilogue(self) -> None:
+        """Разбирает кадр: восстанавливает RA, старый FP и SP, возвращает управление по RA."""
         saved_fp = self._alloc_temp()
         self._emit_lw(RA, FP, -4)
         self._emit_lw(saved_fp, FP, 0)

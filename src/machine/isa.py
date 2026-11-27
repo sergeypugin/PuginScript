@@ -44,7 +44,7 @@ OPCODE: dict[str, int] = {
 
 
 class ISAError(Exception):
-    """Ошибка кодирования инструкции ISA (регистр, immediate или смещение за диапазоном)"""
+    """Ошибка кодирования инструкции ISA (регистр, immediate или смещение за диапазоном)."""
 
 
 def _opcode(mnemonic: str) -> int:
