@@ -1,8 +1,8 @@
 from src.machine.config import INPUT_BUFFER_SIZE, RAM_SIZE
 from src.machine.isa import I, Instruction, J, Out, R, S, Trap
 from src.translator.codegen import Codegen, codegen
-from src.translator.runtime_helpers import RuntimeHelpers
 from src.translator.parser import parse_text
+from src.translator.runtime_helpers import RuntimeHelpers
 from src.translator.semantic import check
 
 
@@ -30,9 +30,11 @@ def test_codegen_emits_only_used_runtime_helpers() -> None:
     bool_codegen = Codegen(bool_program, bool_result)
     bool_codegen.generate()
 
-    plain_labels = getattr(plain_codegen, "_labels")
-    println_labels = getattr(println_codegen, "_labels")
-    bool_labels = getattr(bool_codegen, "_labels")
+    # тесты намеренно проверяют внутренности кодогенератора, поэтому доступ к
+    # _labels подавлен точечно, на конкретных строках, а не на весь файл
+    plain_labels = plain_codegen._labels  # pyright: ignore[reportPrivateUsage]
+    println_labels = println_codegen._labels  # pyright: ignore[reportPrivateUsage]
+    bool_labels = bool_codegen._labels  # pyright: ignore[reportPrivateUsage]
 
     assert not any(name.startswith("rt_") for name in plain_labels)
     assert "rt_println_int" in println_labels

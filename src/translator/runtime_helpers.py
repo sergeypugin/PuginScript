@@ -5,7 +5,6 @@ from typing import Any
 
 from src.machine.config import INPUT_BUFFER_SIZE
 
-
 ZERO = 0
 RA = 1
 SP = 2
@@ -111,6 +110,8 @@ class RuntimeEmitter:
         is_int_min = self._alloc_temp()
         self._emit_seq(is_int_min, val, int_min_val)
         self._emit_beq(is_int_min, ZERO, not_int_min)
+        self._free_temp(int_min_val)
+        self._free_temp(is_int_min)
         self._load_address(tmp, self._add_string("2147483648"))
         ptr2 = self._alloc_temp()
         self._emit_mv(ptr2, tmp)
@@ -126,13 +127,9 @@ class RuntimeEmitter:
         self._define_label(done_min)
         self._free_temp(ptr2)
         self._free_temp(ch)
-        self._free_temp(int_min_val)
-        self._free_temp(is_int_min)
         self._emit_jmp(done)
         self._define_label(not_int_min)
         self._emit_sub(val, ZERO, val)
-        self._free_temp(int_min_val)
-        self._free_temp(is_int_min)
         self._define_label(nonneg)
         self._emit_bne(val, ZERO, loop_div)
         self._define_label(zero_case)
@@ -140,12 +137,8 @@ class RuntimeEmitter:
         self._emit_out(tmp, 1)
         self._emit_jmp(done)
         self._define_label(loop_div)
+        # val > 0, поэтому digit 0-9, abs не нужен
         self._emit_mod(digit, val, ten)
-        self._emit_slt(tmp, digit, ZERO)
-        abs_ok = self._new_label("pi_abs")
-        self._emit_beq(tmp, ZERO, abs_ok)
-        self._emit_sub(digit, ZERO, digit)
-        self._define_label(abs_ok)
         self._emit_addi(SP, SP, -4)
         self._emit_sw(digit, SP, 0)
         self._emit_addi(count, count, 1)
@@ -283,6 +276,9 @@ class RuntimeEmitter:
         self._emit_in(ch, 0)
         nl = self._alloc_temp()
         self._emit_addi(nl, ZERO, 10)
+        self._emit_seq(nl, ch, nl)
+        self._emit_bne(nl, ZERO, done)
+        self._emit_addi(nl, ZERO, 13)
         self._emit_seq(nl, ch, nl)
         self._emit_bne(nl, ZERO, done)
         self._emit_slt(nl, count, limit)
@@ -547,8 +543,7 @@ class RuntimeEmitter:
         self._helper_epilogue()
 
     def _rt_int_to_str(self: Any) -> None:
-        """Преобразует целое число в строку в куче."""
-        """Целое в строку на куче (для конкатенации str + int)."""
+        """Целое в строку на куче (для конкатенации str + int); строка заканчивается '\0'."""
         self._helper_prologue("rt_int_to_str")
         val = self._alloc_temp()
         tval = self._alloc_temp()
@@ -561,6 +556,9 @@ class RuntimeEmitter:
         sign_reg = self._alloc_temp()
 
         nonneg = self._new_label("its_nonneg")
+        int_min_path = self._new_label("its_int_min")
+        min_copy = self._new_label("its_min_copy")
+        min_copy_done = self._new_label("its_min_copy_done")
         count_loop = self._new_label("its_count")
         count_done = self._new_label("its_count_done")
         fill_digits = self._new_label("its_fill_digits")
@@ -578,6 +576,13 @@ class RuntimeEmitter:
         self._emit_addi(sign_reg, ZERO, 1)
         self._emit_sub(val, ZERO, val)
         self._emit_mv(tval, val)
+        # INT_MIN не представим положительным числом: обходим его отдельным путём
+        int_min = self._alloc_temp()
+        self._load_address(int_min, self._add_word(0x80000000))
+        self._emit_lw(int_min, int_min, 0)
+        self._emit_seq(tmp, val, int_min)
+        self._free_temp(int_min)
+        self._emit_bne(tmp, ZERO, int_min_path)
 
         self._define_label(nonneg)
         self._emit_bne(tval, ZERO, count_loop)
@@ -592,15 +597,22 @@ class RuntimeEmitter:
         self._define_label(count_done)
         sign_present = self._alloc_temp()
         self._emit_addi(sign_present, ZERO, 0)
-        self._emit_seq(sign_present, sign_reg, sign_present)
+        self._emit_seq(sign_present, sign_reg, ZERO)
         no_sign = self._new_label("its_no_sign")
-        self._emit_beq(sign_present, ZERO, no_sign)
+        self._emit_bne(sign_present, ZERO, no_sign)
         self._emit_addi(count, count, 1)
         self._define_label(no_sign)
         self._free_temp(sign_present)
         self._emit_addi(tmp, count, 1)
         self._emit_mv(str_start, HP)
         self._emit_add(HP, HP, tmp)
+        # HP округляем вверх до кратности 4, иначе следующая аллокация
+        # запишет слово по невыровненному адресу
+        self._emit_addi(tval, ZERO, 3)
+        self._emit_add(HP, HP, tval)
+        self._emit_lui(tval, 0xFFFF)
+        self._emit_ori(tval, tval, 0xFFFC)
+        self._emit_and(HP, HP, tval)
 
         # '\0' в конце
         self._emit_mv(ptr, str_start)
@@ -640,6 +652,28 @@ class RuntimeEmitter:
         self._emit_div(val, val, ten)
         self._emit_jmp(fill_loop)
 
+        # "-2147483648": '-' плюс копия статической строки (она уже есть в
+        # статике для rt_print_int, _add_string дедуплицирует)
+        self._define_label(int_min_path)
+        self._emit_mv(str_start, HP)
+        self._emit_addi(tmp, ZERO, 12)
+        self._emit_add(HP, HP, tmp)
+        self._emit_addi(tmp, ZERO, 45)
+        self._emit_sb(tmp, str_start, 0)
+        self._load_address(tval, self._add_string("2147483648"))
+        self._emit_mv(ptr, str_start)
+        self._emit_addi(ptr, ptr, 1)
+        self._define_label(min_copy)
+        self._emit_lbu(tmp, tval, 0)
+        self._emit_beq(tmp, ZERO, min_copy_done)
+        self._emit_sb(tmp, ptr, 0)
+        self._emit_addi(tval, tval, 1)
+        self._emit_addi(ptr, ptr, 1)
+        self._emit_jmp(min_copy)
+        self._define_label(min_copy_done)
+        self._emit_sb(ZERO, ptr, 0)
+        self._emit_jmp(fill_done)
+
         self._define_label(fill_done)
         self._emit_mv(RESULT_REG, str_start)
         for r in (val, tval, tmp, count, ten, digit, ptr, str_start, sign_reg):
@@ -647,7 +681,6 @@ class RuntimeEmitter:
         self._helper_epilogue()
 
     def _rt_bool_to_str(self: Any) -> None:
-        """Преобразует логическое значение в статическую строку."""
         """Булево в строку "true"/"false" (статические данные, HP не трогаем)."""
         self._helper_prologue("rt_bool_to_str")
         val = self._alloc_temp()

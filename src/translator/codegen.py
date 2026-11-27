@@ -20,48 +20,47 @@
 from dataclasses import dataclass
 from typing import Any
 
-from src.translator.runtime_helpers import RuntimeEmitter, RuntimeHelpers
-
-from src.translator.syntax_tree import (
-    Program,
-    FunctionDecl,
-    ConstDecl,
-    VarDecl,
-    Assignment,
-    IfStmt,
-    WhileStmt,
-    ReturnStmt,
-    ExprStmt,
-    Block,
-    Expr,
-    IntegerLiteral,
-    StringLiteral,
-    CharLiteral,
-    BoolLiteral,
-    ArrayLiteral,
-    Identifier,
-    Index,
-    Call,
-    Unary,
-    Binary,
-    New,
-    Type,
-    Stmt,
-)
-from src.translator.semantic import SemResult, ConstSymbol, VarSymbol, FuncSymbol
 from src.machine.config import MAX_STATIC_SIZE, RAM_SIZE
 from src.machine.isa import (
-    Instruction,
-    R as InsR,
-    I as InsI,
-    S as InsS,
     B as InsB,
+    Halt as InsHalt,
+    I as InsI,
+    In as InsIn,
+    Instruction,
     J as InsJ,
     Jr as InsJr,
-    In as InsIn,
     Out as InsOut,
+    R as InsR,
+    S as InsS,
     Trap as InsTrap,
-    Halt as InsHalt,
+)
+from src.translator.runtime_helpers import RuntimeEmitter, RuntimeHelpers
+from src.translator.semantic import ConstSymbol, FuncSymbol, SemResult, VarSymbol
+from src.translator.syntax_tree import (
+    ArrayLiteral,
+    Assignment,
+    Binary,
+    Block,
+    BoolLiteral,
+    Call,
+    CharLiteral,
+    ConstDecl,
+    Expr,
+    ExprStmt,
+    FunctionDecl,
+    Identifier,
+    IfStmt,
+    Index,
+    IntegerLiteral,
+    New,
+    Program,
+    ReturnStmt,
+    Stmt,
+    StringLiteral,
+    Type,
+    Unary,
+    VarDecl,
+    WhileStmt,
 )
 
 # Регистры по docs/ISA.md
@@ -106,7 +105,6 @@ class Codegen:
 
         self._in_use: set[int] = set()
         self._func_slots: dict[int, dict[int, _Slot]] = {}
-        self._func_params: dict[int, list[_Slot]] = {}
 
         self._env: list[dict[str, _Slot]] = []
         self._current_func_id: int = 0
@@ -384,11 +382,7 @@ class Codegen:
         for idx, name in self._fixups:
             target = self._labels.get(name)
             if target is None:
-                alt = f"func_{name}" if not name.startswith("func_") else name
-                target = self._labels.get(alt)
-                if target is None:
-                    raise CodegenError(f"метка {name} не определена")
-                name = alt
+                raise CodegenError(f"метка {name} не определена")
             ins = self.code[idx]
             disp = target - (idx + 1)
             if isinstance(ins, InsB):
@@ -464,8 +458,6 @@ class Codegen:
     def _compile_script(self) -> None:
         self._define_label("func___script")
         self._current_func_id = 0
-        self._func_slots[0] = {}
-        self._func_params[0] = []
 
         statements = [item for item in self.program.items if isinstance(item, Stmt)]
         self._collect_frame_slots(0, [], statements)
@@ -641,21 +633,23 @@ class Codegen:
         self, index_reg: int, length_reg: int, allow_terminator: bool = False
     ) -> None:
         negative = self._alloc_temp()
-        out_of_range = self._alloc_temp()
+        flag = self._alloc_temp()
         ok = self._new_label("index_ok")
         trap = self._new_label("index_trap")
         self._emit_slt(negative, index_reg, ZERO)
         self._emit_bne(negative, ZERO, trap)
         if allow_terminator:
-            self._emit_slt(out_of_range, length_reg, index_reg)
+            # индекс == длине разрешён: это позиция терминатора строки
+            self._emit_slt(flag, length_reg, index_reg)
+            self._emit_beq(flag, ZERO, ok)
         else:
-            self._emit_slt(out_of_range, index_reg, length_reg)
-        self._emit_beq(out_of_range, ZERO, ok)
+            self._emit_slt(flag, index_reg, length_reg)
+            self._emit_bne(flag, ZERO, ok)
         self._define_label(trap)
         self._emit_trap(4)
         self._define_label(ok)
         self._free_temp(negative)
-        self._free_temp(out_of_range)
+        self._free_temp(flag)
 
     def _emit_assignment_op(self, result: int, left: int, right: int, op: str) -> None:
         op_map = {"+=": "add", "-=": "sub", "*=": "mul", "/=": "div", "%=": "mod"}
