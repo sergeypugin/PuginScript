@@ -155,7 +155,9 @@ def test_cli_reports_write_error(
     assert "не удалось записать результат" in captured.err
     # bin был записан до падения записи листинга и подчищен при откате
     assert not (outdir / "tiny.bin").exists()
-    os.chmod(stale, stat.S_IRUSR | stat.S_IWUSR)
+    # на Windows read-only файл неудаляем и переживает откат, на Linux -- нет
+    if stale.exists():
+        os.chmod(stale, stat.S_IRUSR | stat.S_IWUSR)
 
 
 def test_python_dash_m_entry_point(tmp_path: Path) -> None:
