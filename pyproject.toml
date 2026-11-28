@@ -14,7 +14,8 @@ dependencies = []
 [project.optional-dependencies]
 dev = [
     "pyright>=1.1.414,<1.2",
-    "pytest>=8.4.2,<8.5",
+    "pytest>=9.1.1,<10",
+    "ruff>=0.17.6,<0.18",
 ]
 
 [tool.setuptools.packages.find]
@@ -30,3 +31,22 @@ typeCheckingMode = "strict"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+
+[tool.ruff]
+line-length = 120
+
+# ruff знает про ленивые аннотации
+# и не ругается на forward-ссылки
+target-version = "py314"
+extend-exclude = ["_tmp_*.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "W"]
+#
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.lint.per-file-ignores]
+# для [isa.py](src/machine/isa.py) отключено правило, т.к.
+# классы `R`, `I`, `S`, `B` -- имена форматов инструкций
+"src/machine/isa.py" = ["E742"]
