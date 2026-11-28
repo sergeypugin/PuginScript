@@ -18,7 +18,6 @@
 """
 
 from dataclasses import dataclass
-from typing import Any
 
 from src.machine.config import MAX_STATIC_SIZE, RAM_SIZE
 from src.machine.isa import (
@@ -53,6 +52,7 @@ from src.translator.syntax_tree import (
     Index,
     IntegerLiteral,
     New,
+    Param,
     Program,
     ReturnStmt,
     Stmt,
@@ -422,7 +422,7 @@ class Codegen:
     def _collect_frame_slots(
         self,
         func_id: int,
-        params: list[Any],
+        params: list[Param],
         statements: list[Stmt],
     ) -> None:
         offset = -4

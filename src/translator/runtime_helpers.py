@@ -1,9 +1,12 @@
 """Реестр и генерация runtime-хелперов."""
 
 from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from src.machine.config import INPUT_BUFFER_SIZE
+
+if TYPE_CHECKING:
+    from src.translator.codegen import Codegen
 
 ZERO = 0
 RA = 1
@@ -17,7 +20,7 @@ ARG_REGS = (4, 5, 6, 7)
 class RuntimeEmitter:
     """Генерирует runtime-хелперы через состояние основного кодогенератора."""
 
-    def __init__(self, backend: Any) -> None:
+    def __init__(self, backend: Codegen) -> None:
         self._backend = backend
 
     def __getattr__(self, name: str) -> Any:
@@ -27,7 +30,7 @@ class RuntimeEmitter:
         """Генерирует хелпер по его имени."""
         getattr(self, f"_{name}")()
 
-    def _helper_prologue(self: Any, name: str) -> None:
+    def _helper_prologue(self, name: str) -> None:
         """Кадр runtime-хелпера: та же раскладка, что у обычных функций."""
         self._define_label(name)
         self._emit_addi(SP, SP, -8)
@@ -35,7 +38,7 @@ class RuntimeEmitter:
         self._emit_sw(RA, SP, 0)
         self._emit_addi(FP, SP, 4)
 
-    def _helper_epilogue(self: Any) -> None:
+    def _helper_epilogue(self) -> None:
         """Симметричный снос кадра хелпера."""
         old_fp = self._alloc_temp()
         self._emit_lw(RA, FP, -4)
@@ -45,14 +48,14 @@ class RuntimeEmitter:
         self._free_temp(old_fp)
         self._emit_jr(RA)
 
-    def _rt_print_char(self: Any) -> None:
+    def _rt_print_char(self) -> None:
         """Выводит символ из регистра результата."""
         self._helper_prologue("rt_print_char")
         self._emit_out(RESULT_REG, 1)
         self._emit_mv(RESULT_REG, ZERO)
         self._helper_epilogue()
 
-    def _rt_print_str(self: Any) -> None:
+    def _rt_print_str(self) -> None:
         """Выводит нуль-терминированную строку."""
         self._helper_prologue("rt_print_str")
         ptr = self._alloc_temp()
@@ -72,7 +75,7 @@ class RuntimeEmitter:
         self._free_temp(ch)
         self._helper_epilogue()
 
-    def _rt_println_str(self: Any) -> None:
+    def _rt_println_str(self) -> None:
         """Выводит строку и перевод строки."""
         self._helper_prologue("rt_println_str")
         saved = self._save_temps()
@@ -85,7 +88,7 @@ class RuntimeEmitter:
         self._emit_mv(RESULT_REG, ZERO)
         self._helper_epilogue()
 
-    def _rt_print_int(self: Any) -> None:
+    def _rt_print_int(self) -> None:
         """Выводит знаковое целое число."""
         self._helper_prologue("rt_print_int")
         val = self._alloc_temp()
@@ -160,7 +163,7 @@ class RuntimeEmitter:
             self._free_temp(r)
         self._helper_epilogue()
 
-    def _rt_println_int(self: Any) -> None:
+    def _rt_println_int(self) -> None:
         """Выводит целое число и перевод строки."""
         self._helper_prologue("rt_println_int")
         saved = self._save_temps()
@@ -173,7 +176,7 @@ class RuntimeEmitter:
         self._emit_mv(RESULT_REG, ZERO)
         self._helper_epilogue()
 
-    def _rt_print_bool(self: Any) -> None:
+    def _rt_print_bool(self) -> None:
         """Выводит логическое значение."""
         self._helper_prologue("rt_print_bool")
         val = self._alloc_temp()
@@ -203,7 +206,7 @@ class RuntimeEmitter:
         self._free_temp(ptr)
         self._helper_epilogue()
 
-    def _rt_println_bool(self: Any) -> None:
+    def _rt_println_bool(self) -> None:
         """Выводит логическое значение и перевод строки."""
         self._helper_prologue("rt_println_bool")
         saved = self._save_temps()
@@ -216,13 +219,13 @@ class RuntimeEmitter:
         self._emit_mv(RESULT_REG, ZERO)
         self._helper_epilogue()
 
-    def _rt_len(self: Any) -> None:
+    def _rt_len(self) -> None:
         """Возвращает длину массива."""
         self._helper_prologue("rt_len")
         self._emit_lw(RESULT_REG, RESULT_REG, 0)
         self._helper_epilogue()
 
-    def _rt_len_str(self: Any) -> None:
+    def _rt_len_str(self) -> None:
         """Возвращает длину нуль-терминированной строки."""
         self._helper_prologue("rt_len_str")
         ptr = self._alloc_temp()
@@ -245,13 +248,13 @@ class RuntimeEmitter:
         self._free_temp(count)
         self._helper_epilogue()
 
-    def _rt_input_char(self: Any) -> None:
+    def _rt_input_char(self) -> None:
         """Читает один символ."""
         self._helper_prologue("rt_input_char")
         self._emit_in(RESULT_REG, 0)
         self._helper_epilogue()
 
-    def _rt_input(self: Any) -> None:
+    def _rt_input(self) -> None:
         """Читает строку во временный буфер кучи."""
         self._helper_prologue("rt_input")
         buf = self._alloc_temp()
@@ -298,7 +301,7 @@ class RuntimeEmitter:
             self._free_temp(r)
         self._helper_epilogue()
 
-    def _rt_input_int(self: Any) -> None:
+    def _rt_input_int(self) -> None:
         """Читает знаковое целое число."""
         self._helper_prologue("rt_input_int")
         val = self._alloc_temp()
@@ -388,7 +391,7 @@ class RuntimeEmitter:
             self._free_temp(r)
         self._helper_epilogue()
 
-    def _rt_pow(self: Any) -> None:
+    def _rt_pow(self) -> None:
         """Вычисляет целую степень."""
         self._helper_prologue("rt_pow")
         base = self._alloc_temp()
@@ -417,7 +420,7 @@ class RuntimeEmitter:
             self._free_temp(r)
         self._helper_epilogue()
 
-    def _rt_concat(self: Any) -> None:
+    def _rt_concat(self) -> None:
         """Объединяет две строки в куче."""
         self._helper_prologue("rt_concat")
         left = self._alloc_temp()
@@ -511,7 +514,7 @@ class RuntimeEmitter:
             self._free_temp(r)
         self._helper_epilogue()
 
-    def _rt_str_eq(self: Any) -> None:
+    def _rt_str_eq(self) -> None:
         """Сравнивает две строки по содержимому."""
         self._helper_prologue("rt_str_eq")
         left = self._alloc_temp()
@@ -544,7 +547,7 @@ class RuntimeEmitter:
         self._free_temp(right_char)
         self._helper_epilogue()
 
-    def _rt_int_to_str(self: Any) -> None:
+    def _rt_int_to_str(self) -> None:
         """Целое в строку на куче (для конкатенации str + int); строка заканчивается '\0'."""
         self._helper_prologue("rt_int_to_str")
         val = self._alloc_temp()
@@ -682,7 +685,7 @@ class RuntimeEmitter:
             self._free_temp(r)
         self._helper_epilogue()
 
-    def _rt_bool_to_str(self: Any) -> None:
+    def _rt_bool_to_str(self) -> None:
         """Булево в строку "true"/"false" (статические данные, HP не трогаем)."""
         self._helper_prologue("rt_bool_to_str")
         val = self._alloc_temp()
