@@ -1253,6 +1253,23 @@ def render_listing(
     return "\n".join(lines)
 
 
+def dump(translation: Translation) -> str:
+    """Полный дамп трансляции: статика словами, разделитель, листинг.
+
+    Единственный источник формата для golden-файлов и CLI: золотые
+    тесты сравнивают dump(translation) + "\n", CLI пишет тот же текст
+    в .lst.
+    """
+    words = [
+        translation.static[i : i + 4].hex()
+        for i in range(0, len(translation.static), 4)
+    ]
+    rows = [" ".join(words[i : i + 8]) for i in range(0, len(words), 8)]
+    return "\n".join(
+        [f"static {len(translation.static)}", *rows, "---", translation.listing]
+    )
+
+
 def codegen(program: Program, result: SemResult) -> Translation:
     cg = Codegen(program, result)
     return cg.generate()
