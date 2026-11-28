@@ -1253,12 +1253,12 @@ def render_listing(
     return "\n".join(lines)
 
 
-def dump(translation: Translation) -> str:
-    """Полный дамп трансляции: статика словами, разделитель, листинг.
+def listing(translation: Translation) -> str:
+    """Полный листинг трансляции: секция статики, разделитель, листинг кода.
 
     Единственный источник формата для golden-файлов и CLI: золотые
-    тесты сравнивают dump(translation) + "\n", CLI пишет тот же текст
-    в .lst.
+    тесты сравнивают listing(translation) + "\n", CLI пишет тот же
+    текст в .lst.
     """
     words = [
         translation.static[i : i + 4].hex()
