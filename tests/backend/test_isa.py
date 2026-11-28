@@ -17,6 +17,7 @@ from src.machine.isa import (
     Trap,
     encode,
     listing_line,
+    pack_bin,
 )
 
 
@@ -139,3 +140,33 @@ def test_disp26_out_of_range() -> None:
         encode(J(mnemonic="jmp", disp=-33554433))
     with pytest.raises(ISAError):
         encode(J(mnemonic="jmp", disp=33554432))
+
+
+def test_pack_bin_layout() -> None:
+    static = b"\x00\x00\x00\x00\x2a\x00\x00\x00"
+    first = R(mnemonic="add", rd=1, rs1=2, rs2=3)
+    binary = pack_bin(static, [first, Halt()])
+
+    assert int.from_bytes(binary[:4], "little") == len(static)
+    assert binary[4:12] == static
+    assert int.from_bytes(binary[12:16], "little") == encode(first)
+    assert int.from_bytes(binary[16:20], "little") == 0xFC000000
+
+
+def test_pack_bin_words_are_little_endian() -> None:
+    static = b"\x00\x00\x00\x00"
+    ins = I(mnemonic="addi", rd=5, rs1=0, imm=42)
+    binary = pack_bin(static, [ins])
+
+    assert int.from_bytes(binary[:4], "little") == 4
+    assert binary[4:8] == static
+    assert binary[8:12] == encode(ins).to_bytes(4, "little")
+
+
+def test_listing_line_substitutes_label_for_branches_only() -> None:
+    branch = B(mnemonic="beq", rs1=1, rs2=2, disp=12)
+    plain = I(mnemonic="addi", rd=5, rs1=0, imm=42)
+
+    assert listing_line(3, branch) == "3 - c022000c - beq R1, R2, 12"
+    assert listing_line(3, branch, "endwhile") == "3 - c022000c - beq R1, R2, endwhile"
+    assert listing_line(1, plain, "ignored") == "1 - 40a0002a - addi R5, R0, 42"

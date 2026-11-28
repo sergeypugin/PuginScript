@@ -1,8 +1,10 @@
 """Кодогенерация PuginScript: из Program + SemResult в инструкции ISA и статику.
 
-Возвращает пару (static_bytes, code_instructions):
-- static_bytes -- байтовый образ секции данных (Little Endian, слово 0 = 0)
-- code_instructions -- список Instruction для памяти команд (PC = 0)
+codegen() возвращает Translation:
+- static -- байтовый образ секции данных (Little Endian, слово 0 = 0)
+- code -- список Instruction для памяти команд (PC = 0)
+- listing -- текстовый листинг с именами меток (render_listing)
+- binary -- загрузочный `.bin` (pack_bin из src/machine/isa.py)
 
 Следует соглашению из docs/ISA.md:
 - R0 -- ноль
@@ -32,6 +34,8 @@ from src.machine.isa import (
     R as InsR,
     S as InsS,
     Trap as InsTrap,
+    listing_line,
+    pack_bin,
 )
 from src.translator.runtime_helpers import RuntimeEmitter, RuntimeHelpers
 from src.translator.semantic import ConstSymbol, FuncSymbol, SemResult, VarSymbol
@@ -87,6 +91,16 @@ def _is_small_int(value: int) -> bool:
 
 class CodegenError(Exception):
     """Ошибка кодогенерации."""
+
+
+@dataclass(frozen=True)
+class Translation:
+    """Результат трансляции: статика, инструкции, листинг и собранный .bin."""
+
+    static: bytes
+    code: tuple[Instruction, ...]
+    listing: str
+    binary: bytes
 
 
 class Codegen:
@@ -392,7 +406,7 @@ class Codegen:
 
     # entry
 
-    def generate(self) -> tuple[bytes, list[Instruction]]:
+    def generate(self) -> Translation:
         if self.result.errors:
             raise CodegenError("нельзя генерировать код при семантических ошибках")
 
@@ -415,7 +429,16 @@ class Codegen:
             raise CodegenError("статика превышает максимально допустимый размер")
         self.code[hp_init] = InsI("addi", HP, ZERO, len(self.data))
         self._patch_labels()
-        return self._static_bytes(), self.code
+        # имена меток в ветвлениях берутся из fixups
+        # после патча остаются только числовые смещения
+        listing = render_listing(self.code, self._labels, self._fixups)
+        static = self._static_bytes()
+        return Translation(
+            static=static,
+            code=tuple(self.code),
+            listing=listing,
+            binary=pack_bin(static, self.code),
+        )
 
     # script mode
 
@@ -1201,6 +1224,35 @@ class Codegen:
 
 
 
-def codegen(program: Program, result: SemResult) -> tuple[bytes, list[Instruction]]:
+def render_listing(
+    code: list[Instruction],
+    labels: dict[str, int],
+    fixups: list[tuple[int, str]],
+) -> str:
+    """Строит листинг: слова из code, имена меток из labels и fixups.
+
+    Подмену смещения ветвления на имя метки делает listing_line, поскольку
+    после патча имена в disp уже не сохранились. Определение метки
+    печатается отдельной строкой <имя>: перед своей инструкцией;
+    метки за концом кода попадают в конец листинга.
+    """
+    labels_at: dict[int, list[str]] = {}
+    for name, index in labels.items():
+        labels_at.setdefault(index, []).append(name)
+    names_at = dict(fixups)
+
+    lines: list[str] = []
+    for index, ins in enumerate(code):
+        for name in labels_at.pop(index, []):
+            lines.append(f"{name}:")
+        lines.append(listing_line(index, ins, names_at.get(index)))
+    for index in sorted(labels_at):
+        for name in labels_at[index]:
+            lines.append(f"{name}:")
+
+    return "\n".join(lines)
+
+
+def codegen(program: Program, result: SemResult) -> Translation:
     cg = Codegen(program, result)
     return cg.generate()

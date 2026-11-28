@@ -1,16 +1,26 @@
+import re
+from pathlib import Path
+
 from src.machine.config import INPUT_BUFFER_SIZE, RAM_SIZE
-from src.machine.isa import I, Instruction, J, Out, R, S, Trap
-from src.translator.codegen import Codegen, codegen
-from src.translator.parser import parse_text
+from src.machine.isa import Halt, I, Instruction, J, Out, R, S, Trap, encode
+from src.translator.codegen import Codegen, codegen, render_listing
+from src.translator.parser import parse, parse_text
 from src.translator.runtime_helpers import RuntimeHelpers
 from src.translator.semantic import check
 
+_ROOT = Path(__file__).resolve().parents[2]
+_EXAMPLES = _ROOT / "examples"
 
-def generate(source: str) -> tuple[bytes, list[Instruction]]:
+LISTING_LINE = re.compile(r"^\d+ - [0-9a-f]{8} - ")
+LABEL_LINE = re.compile(r"^\w+:$")
+
+
+def generate(source: str) -> tuple[bytes, tuple[Instruction, ...]]:
     program = parse_text(source, "test")
     result = check(program)
     assert not result.errors
-    return codegen(program, result)
+    translation = codegen(program, result)
+    return translation.static, translation.code
 
 
 
@@ -184,3 +194,74 @@ def test_codegen_converts_bool_to_text_and_println_without_arguments() -> None:
     )
     assert any(isinstance(ins, Out) and ins.port == 1 for ins in instructions)
     assert any(isinstance(ins, J) and ins.mnemonic == "jal" for ins in instructions)
+
+
+def test_listing_keeps_label_names() -> None:
+    program = parse(str(_EXAMPLES / "power_many.ps"))
+    result = check(program)
+    assert not result.errors
+    translation = codegen(program, result)
+
+    lines = translation.listing.splitlines()
+    assert lines, "листинг не должен быть пустым"
+    assert all(LISTING_LINE.match(line) or LABEL_LINE.match(line) for line in lines)
+    assert "script_func:" in lines
+
+    label_names = {line[:-1] for line in lines if LABEL_LINE.match(line)}
+    branch_targets = [
+        line.split(" - ")[2].split()[-1]
+        for line in lines
+        if LISTING_LINE.match(line)
+        and line.split(" - ")[2].split()[0] in ("beq", "bne", "jmp", "jal")
+    ]
+    assert branch_targets, "в программе должны быть ветвления"
+    assert all(target in label_names for target in branch_targets)
+
+
+def test_listing_hex_matches_patched_code() -> None:
+    program = parse_text("println(42);", "test")
+    result = check(program)
+    assert not result.errors
+    translation = codegen(program, result)
+
+    instruction_lines = [
+        line for line in translation.listing.splitlines() if LISTING_LINE.match(line)
+    ]
+    assert len(instruction_lines) == len(translation.code)
+
+    for index, (line, ins) in enumerate(
+        zip(instruction_lines, translation.code, strict=True)
+    ):
+        address, word, text = line.split(" - ", 2)
+        assert int(address) == index
+        assert word == f"{encode(ins):08x}"
+        assert text
+
+
+def test_codegen_binary_contains_static_and_code() -> None:
+    program = parse_text("int x = 1;", "test")
+    result = check(program)
+    assert not result.errors
+    translation = codegen(program, result)
+    binary = translation.binary
+
+    assert int.from_bytes(binary[:4], "little") == len(translation.static)
+    assert binary[4 : 4 + len(translation.static)] == translation.static
+    assert len(binary) == 4 + len(translation.static) + 4 * len(translation.code)
+
+
+def test_render_listing_substitutes_label_names() -> None:
+    listing = render_listing([J("jmp", 5), Halt()], {"loop": 1}, [(0, "loop")])
+
+    assert listing.splitlines() == [
+        "0 - d0000005 - jmp loop",
+        "loop:",
+        "1 - fc000000 - halt",
+    ]
+
+
+def test_render_listing_appends_labels_after_last_instruction() -> None:
+    assert render_listing([], {}, []) == ""
+
+    labels_at_end = render_listing([], {"end": 0, "start": 0}, [])
+    assert labels_at_end.splitlines() == ["end:", "start:"]

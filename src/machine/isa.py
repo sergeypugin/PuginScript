@@ -222,5 +222,23 @@ def mnemonic(ins: Instruction) -> str:
     return "halt"  # Halt
 
 
-def listing_line(address: int, ins: Instruction) -> str:
-    return f"{address} - {encode(ins):08x} - {mnemonic(ins)}"
+def listing_line(address: int, ins: Instruction, label: str | None = None) -> str:
+    """Строка листинга; label заменяет смещение ветвления именем метки."""
+    text = mnemonic(ins)
+    if label is not None and isinstance(ins, B | J):
+        text = " ".join([*text.split()[:-1], label])
+    return f"{address} - {encode(ins):08x} - {text}"
+
+
+def pack_bin(static: bytes, code: list[Instruction]) -> bytes:
+    """
+    Собирает загрузочный `.bin`.
+
+    4 байта static_size, затем static_size байт образа
+    статики, затем слова инструкций.
+    """
+    out = bytearray(len(static).to_bytes(4, "little"))
+    out += static
+    for ins in code:
+        out += encode(ins).to_bytes(4, "little")
+    return bytes(out)
