@@ -1,0 +1,533 @@
+static 40
+00000000 74727565 00000000 66616c73 65000000 00000080 32313437 34383336
+34380000 cccccc0c
+---
+0 - 41000028 - addi R8, R0, 40
+1 - d4000125 - jal func_main
+2 - fc000000 - halt
+func_read_numbers:
+3 - 4042fff8 - addi R2, R2, -8
+4 - 80620004 - sw R3, 4(R2)
+5 - 80220000 - sw R1, 0(R2)
+6 - 40620004 - addi R3, R2, 4
+7 - 4042fff4 - addi R2, R2, -12
+8 - d4000183 - jal rt_input_int
+9 - 01240000 - add R9, R4, R0
+10 - 8123fff8 - sw R9, -8(R3)
+11 - 4d23fff8 - lw R9, -8(R3)
+12 - 41400000 - addi R10, R0, 0
+13 - 1d6a4800 - slt R11, R10, R9
+14 - 41800001 - addi R12, R0, 1
+15 - 056c5800 - sub R11, R12, R11
+16 - c1600021 - beq R11, R0, else2
+17 - 41200000 - addi R9, R0, 0
+18 - 01480000 - add R10, R8, R0
+19 - 1d890000 - slt R12, R9, R0
+20 - c1800001 - beq R12, R0, new_ok4
+21 - f800000a - trap 10
+new_ok4:
+22 - 45a00003 - lui R13, 3
+23 - 49adffff - ori R13, 65535
+24 - 1d6d4800 - slt R11, R13, R9
+25 - c5600007 - bne R11, R0, new_too_large5
+26 - 41600004 - addi R11, R0, 4
+27 - 096b4800 - mul R11, R11, R9
+28 - 416b0004 - addi R11, R11, 4
+29 - 01085800 - add R8, R8, R11
+30 - 1d685000 - slt R11, R8, R10
+31 - c5600002 - bne R11, R0, new_wrapped6
+32 - d0000002 - jmp new_allocation_ok7
+new_too_large5:
+33 - f8000003 - trap 3
+new_wrapped6:
+34 - f8000003 - trap 3
+new_allocation_ok7:
+35 - 1dc24000 - slt R14, R2, R8
+36 - c1c00001 - beq R14, R0, heap_safe8
+37 - f8000003 - trap 3
+heap_safe8:
+38 - 812a0000 - sw R9, 0(R10)
+39 - 41e00000 - addi R15, R0, 0
+40 - 420a0004 - addi R16, R10, 4
+new_zero_loop9:
+41 - 1d6f4800 - slt R11, R15, R9
+42 - c1600004 - beq R11, R0, new_zero_done10
+43 - 80100000 - sw R0, 0(R16)
+44 - 42100004 - addi R16, R16, 4
+45 - 41ef0001 - addi R15, R15, 1
+46 - d3fffffa - jmp new_zero_loop9
+new_zero_done10:
+47 - 008a0000 - add R4, R10, R0
+48 - d000003c - jmp return_read_numbers1
+49 - d0000000 - jmp endif3
+else2:
+endif3:
+50 - 4d23fff8 - lw R9, -8(R3)
+51 - 01480000 - add R10, R8, R0
+52 - 1d890000 - slt R12, R9, R0
+53 - c1800001 - beq R12, R0, new_ok11
+54 - f800000a - trap 10
+new_ok11:
+55 - 45a00003 - lui R13, 3
+56 - 49adffff - ori R13, 65535
+57 - 1d6d4800 - slt R11, R13, R9
+58 - c5600007 - bne R11, R0, new_too_large12
+59 - 41600004 - addi R11, R0, 4
+60 - 096b4800 - mul R11, R11, R9
+61 - 416b0004 - addi R11, R11, 4
+62 - 01085800 - add R8, R8, R11
+63 - 1d685000 - slt R11, R8, R10
+64 - c5600002 - bne R11, R0, new_wrapped13
+65 - d0000002 - jmp new_allocation_ok14
+new_too_large12:
+66 - f8000003 - trap 3
+new_wrapped13:
+67 - f8000003 - trap 3
+new_allocation_ok14:
+68 - 1dc24000 - slt R14, R2, R8
+69 - c1c00001 - beq R14, R0, heap_safe15
+70 - f8000003 - trap 3
+heap_safe15:
+71 - 812a0000 - sw R9, 0(R10)
+72 - 41e00000 - addi R15, R0, 0
+73 - 420a0004 - addi R16, R10, 4
+new_zero_loop16:
+74 - 1d6f4800 - slt R11, R15, R9
+75 - c1600004 - beq R11, R0, new_zero_done17
+76 - 80100000 - sw R0, 0(R16)
+77 - 42100004 - addi R16, R16, 4
+78 - 41ef0001 - addi R15, R15, 1
+79 - d3fffffa - jmp new_zero_loop16
+new_zero_done17:
+80 - 8143fff4 - sw R10, -12(R3)
+81 - 41200000 - addi R9, R0, 0
+82 - 8123fff0 - sw R9, -16(R3)
+while18:
+83 - 4d23fff0 - lw R9, -16(R3)
+84 - 4d43fff8 - lw R10, -8(R3)
+85 - 1d695000 - slt R11, R9, R10
+86 - c1600013 - beq R11, R0, endwhile19
+87 - d4000134 - jal rt_input_int
+88 - 01240000 - add R9, R4, R0
+89 - 4d43fff0 - lw R10, -16(R3)
+90 - 4d63fff4 - lw R11, -12(R3)
+91 - 4d8b0000 - lw R12, 0(R11)
+92 - 1daa0000 - slt R13, R10, R0
+93 - c5a00002 - bne R13, R0, index_trap21
+94 - 1dca6000 - slt R14, R10, R12
+95 - c5c00001 - bne R14, R0, index_ok20
+index_trap21:
+96 - f8000004 - trap 4
+index_ok20:
+97 - 41a00004 - addi R13, R0, 4
+98 - 09ad5000 - mul R13, R13, R10
+99 - 01ab6800 - add R13, R11, R13
+100 - 812d0004 - sw R9, 4(R13)
+101 - 41200001 - addi R9, R0, 1
+102 - 4d43fff0 - lw R10, -16(R3)
+103 - 016a4800 - add R11, R10, R9
+104 - 8163fff0 - sw R11, -16(R3)
+105 - d3ffffe9 - jmp while18
+endwhile19:
+106 - 4d23fff4 - lw R9, -12(R3)
+107 - 00890000 - add R4, R9, R0
+108 - d0000000 - jmp return_read_numbers1
+return_read_numbers1:
+109 - 4c23fffc - lw R1, -4(R3)
+110 - 4d230000 - lw R9, 0(R3)
+111 - 40430004 - addi R2, R3, 4
+112 - 00690000 - add R3, R9, R0
+113 - 58010000 - jr R1
+func_bubble_sort:
+114 - 4042fff8 - addi R2, R2, -8
+115 - 80620004 - sw R3, 4(R2)
+116 - 80220000 - sw R1, 0(R2)
+117 - 40620004 - addi R3, R2, 4
+118 - 4042ffec - addi R2, R2, -20
+119 - 8083fff8 - sw R4, -8(R3)
+120 - 4d23fff8 - lw R9, -8(R3)
+121 - 00890000 - add R4, R9, R0
+122 - 4042fffc - addi R2, R2, -4
+123 - 81220000 - sw R9, 0(R2)
+124 - d4000105 - jal rt_len
+125 - 4d220000 - lw R9, 0(R2)
+126 - 40420004 - addi R2, R2, 4
+127 - 01240000 - add R9, R4, R0
+128 - 8123fff4 - sw R9, -12(R3)
+129 - 41200000 - addi R9, R0, 0
+130 - 8123fff0 - sw R9, -16(R3)
+while23:
+131 - 4d23fff0 - lw R9, -16(R3)
+132 - 4d43fff4 - lw R10, -12(R3)
+133 - 1d695000 - slt R11, R9, R10
+134 - c1600067 - beq R11, R0, endwhile24
+135 - 41200000 - addi R9, R0, 0
+136 - 8123ffec - sw R9, -20(R3)
+while25:
+137 - 4d23ffec - lw R9, -20(R3)
+138 - 4d43fff4 - lw R10, -12(R3)
+139 - 41600001 - addi R11, R0, 1
+140 - 058a5800 - sub R12, R10, R11
+141 - 4d43fff0 - lw R10, -16(R3)
+142 - 056c5000 - sub R11, R12, R10
+143 - 1d495800 - slt R10, R9, R11
+144 - c1400058 - beq R10, R0, endwhile26
+145 - 4d23fff8 - lw R9, -8(R3)
+146 - 4d43ffec - lw R10, -20(R3)
+147 - 4d890000 - lw R12, 0(R9)
+148 - 1daa0000 - slt R13, R10, R0
+149 - c5a00002 - bne R13, R0, index_trap28
+150 - 1dca6000 - slt R14, R10, R12
+151 - c5c00001 - bne R14, R0, index_ok27
+index_trap28:
+152 - f8000004 - trap 4
+index_ok27:
+153 - 41800004 - addi R12, R0, 4
+154 - 098c5000 - mul R12, R12, R10
+155 - 01a96000 - add R13, R9, R12
+156 - 4d6d0004 - lw R11, 4(R13)
+157 - 4d23fff8 - lw R9, -8(R3)
+158 - 4d43ffec - lw R10, -20(R3)
+159 - 41800001 - addi R12, R0, 1
+160 - 01aa6000 - add R13, R10, R12
+161 - 4d890000 - lw R12, 0(R9)
+162 - 1dcd0000 - slt R14, R13, R0
+163 - c5c00002 - bne R14, R0, index_trap30
+164 - 1ded6000 - slt R15, R13, R12
+165 - c5e00001 - bne R15, R0, index_ok29
+index_trap30:
+166 - f8000004 - trap 4
+index_ok29:
+167 - 41800004 - addi R12, R0, 4
+168 - 098c6800 - mul R12, R12, R13
+169 - 01c96000 - add R14, R9, R12
+170 - 4d4e0004 - lw R10, 4(R14)
+171 - 1d2a5800 - slt R9, R10, R11
+172 - c1200037 - beq R9, R0, else31
+173 - 4d23fff8 - lw R9, -8(R3)
+174 - 4d43ffec - lw R10, -20(R3)
+175 - 4d890000 - lw R12, 0(R9)
+176 - 1daa0000 - slt R13, R10, R0
+177 - c5a00002 - bne R13, R0, index_trap34
+178 - 1dca6000 - slt R14, R10, R12
+179 - c5c00001 - bne R14, R0, index_ok33
+index_trap34:
+180 - f8000004 - trap 4
+index_ok33:
+181 - 41800004 - addi R12, R0, 4
+182 - 098c5000 - mul R12, R12, R10
+183 - 01a96000 - add R13, R9, R12
+184 - 4d6d0004 - lw R11, 4(R13)
+185 - 8163ffe8 - sw R11, -24(R3)
+186 - 4d23fff8 - lw R9, -8(R3)
+187 - 4d43ffec - lw R10, -20(R3)
+188 - 41600001 - addi R11, R0, 1
+189 - 018a5800 - add R12, R10, R11
+190 - 4d690000 - lw R11, 0(R9)
+191 - 1dac0000 - slt R13, R12, R0
+192 - c5a00002 - bne R13, R0, index_trap36
+193 - 1dcc5800 - slt R14, R12, R11
+194 - c5c00001 - bne R14, R0, index_ok35
+index_trap36:
+195 - f8000004 - trap 4
+index_ok35:
+196 - 41600004 - addi R11, R0, 4
+197 - 096b6000 - mul R11, R11, R12
+198 - 01a95800 - add R13, R9, R11
+199 - 4d4d0004 - lw R10, 4(R13)
+200 - 4d23ffec - lw R9, -20(R3)
+201 - 4d63fff8 - lw R11, -8(R3)
+202 - 4d8b0000 - lw R12, 0(R11)
+203 - 1da90000 - slt R13, R9, R0
+204 - c5a00002 - bne R13, R0, index_trap38
+205 - 1dc96000 - slt R14, R9, R12
+206 - c5c00001 - bne R14, R0, index_ok37
+index_trap38:
+207 - f8000004 - trap 4
+index_ok37:
+208 - 41a00004 - addi R13, R0, 4
+209 - 09ad4800 - mul R13, R13, R9
+210 - 01ab6800 - add R13, R11, R13
+211 - 814d0004 - sw R10, 4(R13)
+212 - 4d23ffe8 - lw R9, -24(R3)
+213 - 4d43ffec - lw R10, -20(R3)
+214 - 41600001 - addi R11, R0, 1
+215 - 018a5800 - add R12, R10, R11
+216 - 4d43fff8 - lw R10, -8(R3)
+217 - 4d6a0000 - lw R11, 0(R10)
+218 - 1dac0000 - slt R13, R12, R0
+219 - c5a00002 - bne R13, R0, index_trap40
+220 - 1dcc5800 - slt R14, R12, R11
+221 - c5c00001 - bne R14, R0, index_ok39
+index_trap40:
+222 - f8000004 - trap 4
+index_ok39:
+223 - 41a00004 - addi R13, R0, 4
+224 - 09ad6000 - mul R13, R13, R12
+225 - 01aa6800 - add R13, R10, R13
+226 - 812d0004 - sw R9, 4(R13)
+227 - d0000000 - jmp endif32
+else31:
+endif32:
+228 - 41200001 - addi R9, R0, 1
+229 - 4d43ffec - lw R10, -20(R3)
+230 - 016a4800 - add R11, R10, R9
+231 - 8163ffec - sw R11, -20(R3)
+232 - d3ffffa0 - jmp while25
+endwhile26:
+233 - 41200001 - addi R9, R0, 1
+234 - 4d43fff0 - lw R10, -16(R3)
+235 - 016a4800 - add R11, R10, R9
+236 - 8163fff0 - sw R11, -16(R3)
+237 - d3ffff95 - jmp while23
+endwhile24:
+238 - 00800000 - add R4, R0, R0
+return_bubble_sort22:
+239 - 4c23fffc - lw R1, -4(R3)
+240 - 4d230000 - lw R9, 0(R3)
+241 - 40430004 - addi R2, R3, 4
+242 - 00690000 - add R3, R9, R0
+243 - 58010000 - jr R1
+func_print_numbers:
+244 - 4042fff8 - addi R2, R2, -8
+245 - 80620004 - sw R3, 4(R2)
+246 - 80220000 - sw R1, 0(R2)
+247 - 40620004 - addi R3, R2, 4
+248 - 4042fff4 - addi R2, R2, -12
+249 - 8083fff8 - sw R4, -8(R3)
+250 - 4d23fff8 - lw R9, -8(R3)
+251 - 00890000 - add R4, R9, R0
+252 - 4042fffc - addi R2, R2, -4
+253 - 81220000 - sw R9, 0(R2)
+254 - d4000083 - jal rt_len
+255 - 4d220000 - lw R9, 0(R2)
+256 - 40420004 - addi R2, R2, 4
+257 - 01240000 - add R9, R4, R0
+258 - 8123fff4 - sw R9, -12(R3)
+259 - 41200000 - addi R9, R0, 0
+260 - 8123fff0 - sw R9, -16(R3)
+while42:
+261 - 4d23fff0 - lw R9, -16(R3)
+262 - 4d43fff4 - lw R10, -12(R3)
+263 - 1d695000 - slt R11, R9, R10
+264 - c1600018 - beq R11, R0, endwhile43
+265 - 4d23fff8 - lw R9, -8(R3)
+266 - 4d43fff0 - lw R10, -16(R3)
+267 - 4d890000 - lw R12, 0(R9)
+268 - 1daa0000 - slt R13, R10, R0
+269 - c5a00002 - bne R13, R0, index_trap45
+270 - 1dca6000 - slt R14, R10, R12
+271 - c5c00001 - bne R14, R0, index_ok44
+index_trap45:
+272 - f8000004 - trap 4
+index_ok44:
+273 - 41800004 - addi R12, R0, 4
+274 - 098c5000 - mul R12, R12, R10
+275 - 01a96000 - add R13, R9, R12
+276 - 4d6d0004 - lw R11, 4(R13)
+277 - 008b0000 - add R4, R11, R0
+278 - 4042fffc - addi R2, R2, -4
+279 - 81620000 - sw R11, 0(R2)
+280 - d400005c - jal rt_println_int
+281 - 4d620000 - lw R11, 0(R2)
+282 - 40420004 - addi R2, R2, 4
+283 - 01200000 - add R9, R0, R0
+284 - 41200001 - addi R9, R0, 1
+285 - 4d43fff0 - lw R10, -16(R3)
+286 - 016a4800 - add R11, R10, R9
+287 - 8163fff0 - sw R11, -16(R3)
+288 - d3ffffe4 - jmp while42
+endwhile43:
+289 - 00800000 - add R4, R0, R0
+return_print_numbers41:
+290 - 4c23fffc - lw R1, -4(R3)
+291 - 4d230000 - lw R9, 0(R3)
+292 - 40430004 - addi R2, R3, 4
+293 - 00690000 - add R3, R9, R0
+294 - 58010000 - jr R1
+func_main:
+295 - 4042fff8 - addi R2, R2, -8
+296 - 80620004 - sw R3, 4(R2)
+297 - 80220000 - sw R1, 0(R2)
+298 - 40620004 - addi R3, R2, 4
+299 - 4042fffc - addi R2, R2, -4
+300 - d7fffed6 - jal func_read_numbers
+301 - 01240000 - add R9, R4, R0
+302 - 8123fff8 - sw R9, -8(R3)
+303 - 4d23fff8 - lw R9, -8(R3)
+304 - 4042fffc - addi R2, R2, -4
+305 - 81220000 - sw R9, 0(R2)
+306 - 00890000 - add R4, R9, R0
+307 - d7ffff3e - jal func_bubble_sort
+308 - 4d220000 - lw R9, 0(R2)
+309 - 40420004 - addi R2, R2, 4
+310 - 01240000 - add R9, R4, R0
+311 - 4d23fff8 - lw R9, -8(R3)
+312 - 4042fffc - addi R2, R2, -4
+313 - 81220000 - sw R9, 0(R2)
+314 - 00890000 - add R4, R9, R0
+315 - d7ffffb8 - jal func_print_numbers
+316 - 4d220000 - lw R9, 0(R2)
+317 - 40420004 - addi R2, R2, 4
+318 - 01240000 - add R9, R4, R0
+319 - 41200000 - addi R9, R0, 0
+320 - 00890000 - add R4, R9, R0
+321 - d0000000 - jmp return_main46
+return_main46:
+322 - 4c23fffc - lw R1, -4(R3)
+323 - 4d230000 - lw R9, 0(R3)
+324 - 40430004 - addi R2, R3, 4
+325 - 00690000 - add R3, R9, R0
+326 - 58010000 - jr R1
+rt_print_int:
+327 - 4042fff8 - addi R2, R2, -8
+328 - 80620004 - sw R3, 4(R2)
+329 - 80220000 - sw R1, 0(R2)
+330 - 40620004 - addi R3, R2, 4
+331 - 01240000 - add R9, R4, R0
+332 - 41600000 - addi R11, R0, 0
+333 - 4180000a - addi R12, R0, 10
+334 - 1d490000 - slt R10, R9, R0
+335 - c140000f - beq R10, R0, pi_nonneg47
+336 - 4140002d - addi R10, R0, 45
+337 - 89400001 - out R10, 1
+338 - 41c00014 - addi R14, R0, 20
+339 - 4dce0000 - lw R14, 0(R14)
+340 - 21e97000 - seq R15, R9, R14
+341 - c1e00008 - beq R15, R0, pi_notintmin51
+342 - 41400018 - addi R10, R0, 24
+343 - 01ca0000 - add R14, R10, R0
+pi_min_loop52:
+344 - 55ee0000 - lbu R15, 0(R14)
+345 - c1e00003 - beq R15, R0, pi_min_done53
+346 - 89e00001 - out R15, 1
+347 - 41ce0001 - addi R14, R14, 1
+348 - d3fffffb - jmp pi_min_loop52
+pi_min_done53:
+349 - d0000011 - jmp pi_done49
+pi_notintmin51:
+350 - 05204800 - sub R9, R0, R9
+pi_nonneg47:
+351 - c5200003 - bne R9, R0, pi_div48
+pi_zero50:
+352 - 41400030 - addi R10, R0, 48
+353 - 89400001 - out R10, 1
+354 - d000000c - jmp pi_done49
+pi_div48:
+355 - 11a96000 - mod R13, R9, R12
+356 - 4042fffc - addi R2, R2, -4
+357 - 81a20000 - sw R13, 0(R2)
+358 - 416b0001 - addi R11, R11, 1
+359 - 0d296000 - div R9, R9, R12
+360 - c520fffa - bne R9, R0, pi_div48
+pi_out54:
+361 - 4da20000 - lw R13, 0(R2)
+362 - 40420004 - addi R2, R2, 4
+363 - 41ad0030 - addi R13, R13, 48
+364 - 89a00001 - out R13, 1
+365 - 416bffff - addi R11, R11, -1
+366 - c560fffa - bne R11, R0, pi_out54
+pi_done49:
+367 - 00800000 - add R4, R0, R0
+368 - 4c23fffc - lw R1, -4(R3)
+369 - 4d230000 - lw R9, 0(R3)
+370 - 40430004 - addi R2, R3, 4
+371 - 00690000 - add R3, R9, R0
+372 - 58010000 - jr R1
+rt_println_int:
+373 - 4042fff8 - addi R2, R2, -8
+374 - 80620004 - sw R3, 4(R2)
+375 - 80220000 - sw R1, 0(R2)
+376 - 40620004 - addi R3, R2, 4
+377 - d7ffffcd - jal rt_print_int
+378 - 4120000a - addi R9, R0, 10
+379 - 89200001 - out R9, 1
+380 - 00800000 - add R4, R0, R0
+381 - 4c23fffc - lw R1, -4(R3)
+382 - 4d230000 - lw R9, 0(R3)
+383 - 40430004 - addi R2, R3, 4
+384 - 00690000 - add R3, R9, R0
+385 - 58010000 - jr R1
+rt_len:
+386 - 4042fff8 - addi R2, R2, -8
+387 - 80620004 - sw R3, 4(R2)
+388 - 80220000 - sw R1, 0(R2)
+389 - 40620004 - addi R3, R2, 4
+390 - 4c840000 - lw R4, 0(R4)
+391 - 4c23fffc - lw R1, -4(R3)
+392 - 4d230000 - lw R9, 0(R3)
+393 - 40430004 - addi R2, R3, 4
+394 - 00690000 - add R3, R9, R0
+395 - 58010000 - jr R1
+rt_input_int:
+396 - 4042fff8 - addi R2, R2, -8
+397 - 80620004 - sw R3, 4(R2)
+398 - 80220000 - sw R1, 0(R2)
+399 - 40620004 - addi R3, R2, 4
+400 - 41200000 - addi R9, R0, 0
+401 - 41400001 - addi R10, R0, 1
+402 - 4180000a - addi R12, R0, 10
+403 - 41e00000 - addi R15, R0, 0
+404 - 5d600000 - in R11, 0
+405 - 41c0002d - addi R14, R0, 45
+406 - 21cb7000 - seq R14, R11, R14
+407 - c1c00002 - beq R14, R0, ii_notneg57
+408 - 4140ffff - addi R10, R0, -1
+409 - 5d600000 - in R11, 0
+ii_notneg57:
+ii_loop56:
+410 - 41c0000a - addi R14, R0, 10
+411 - 21cb7000 - seq R14, R11, R14
+412 - c5c00022 - bne R14, R0, ii_done55
+413 - 41c0000d - addi R14, R0, 13
+414 - 21cb7000 - seq R14, R11, R14
+415 - c5c0001f - bne R14, R0, ii_done55
+416 - 41c00030 - addi R14, R0, 48
+417 - 1dab7000 - slt R13, R11, R14
+418 - c5a0001a - bne R13, R0, ii_bad58
+419 - 41c0003a - addi R14, R0, 58
+420 - 1dab7000 - slt R13, R11, R14
+421 - c1a00017 - beq R13, R0, ii_bad58
+422 - 41e00001 - addi R15, R0, 1
+423 - 41c00030 - addi R14, R0, 48
+424 - 05ab7000 - sub R13, R11, R14
+425 - 1dc90000 - slt R14, R9, R0
+426 - c5c00013 - bne R14, R0, ii_trap59
+427 - 42000024 - addi R16, R0, 36
+428 - 4e100000 - lw R16, 0(R16)
+429 - 1dd04800 - slt R14, R16, R9
+430 - c5c0000f - bne R14, R0, ii_trap59
+431 - 21c98000 - seq R14, R9, R16
+432 - c1c00008 - beq R14, R0, ii_below_limit60
+433 - 41c00001 - addi R14, R0, 1
+434 - 21ca7000 - seq R14, R10, R14
+435 - c5c00002 - bne R14, R0, ii_positive61
+436 - 41c00008 - addi R14, R0, 8
+437 - d0000001 - jmp ii_threshold62
+ii_positive61:
+438 - 41c00007 - addi R14, R0, 7
+ii_threshold62:
+439 - 1dce6800 - slt R14, R14, R13
+440 - c5c00005 - bne R14, R0, ii_trap59
+ii_below_limit60:
+441 - 09296000 - mul R9, R9, R12
+442 - 01296800 - add R9, R9, R13
+443 - 5d600000 - in R11, 0
+444 - d3ffffdd - jmp ii_loop56
+ii_bad58:
+445 - d0000000 - jmp ii_trap59
+ii_trap59:
+446 - f8000007 - trap 7
+ii_done55:
+447 - c1e0fffe - beq R15, R0, ii_trap59
+448 - 41c00001 - addi R14, R0, 1
+449 - 21ca7000 - seq R14, R10, R14
+450 - c5c00001 - bne R14, R0, ii_pos63
+451 - 05204800 - sub R9, R0, R9
+ii_pos63:
+452 - 00890000 - add R4, R9, R0
+453 - 4c23fffc - lw R1, -4(R3)
+454 - 4d230000 - lw R9, 0(R3)
+455 - 40430004 - addi R2, R3, 4
+456 - 00690000 - add R3, R9, R0
+457 - 58010000 - jr R1

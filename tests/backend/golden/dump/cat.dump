@@ -1,0 +1,30 @@
+static 36
+00000000 74727565 00000000 66616c73 65000000 00000080 32313437 34383336
+34380000
+---
+0 - 41000024 - addi R8, R0, 36
+1 - d4000001 - jal script_func
+2 - fc000000 - halt
+script_func:
+3 - 4042fff8 - addi R2, R2, -8
+4 - 80620004 - sw R3, 4(R2)
+5 - 80220000 - sw R1, 0(R2)
+6 - 40620004 - addi R3, R2, 4
+7 - 4042fffc - addi R2, R2, -4
+while2:
+8 - 41200001 - addi R9, R0, 1
+9 - c1200006 - beq R9, R0, endwhile3
+10 - 5d200000 - in R9, 0
+11 - 8123fff8 - sw R9, -8(R3)
+12 - 4d23fff8 - lw R9, -8(R3)
+13 - 89200001 - out R9, 1
+14 - 01200000 - add R9, R0, R0
+15 - d3fffff8 - jmp while2
+endwhile3:
+16 - 00800000 - add R4, R0, R0
+return_script1:
+17 - 4c23fffc - lw R1, -4(R3)
+18 - 4d230000 - lw R9, 0(R3)
+19 - 40430004 - addi R2, R3, 4
+20 - 00690000 - add R3, R9, R0
+21 - 58010000 - jr R1

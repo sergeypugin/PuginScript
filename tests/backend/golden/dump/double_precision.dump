@@ -1,0 +1,1194 @@
+static 264
+00000000 74727565 00000000 66616c73 65000000 00000080 32313437 34383336
+34380000 36342d62 69742061 72697468 6d657469 63206578 616d706c 650a0000
+33322d62 69742072 616e6765 3a202d32 5f313437 5f343833 5f363438 20746f20
+325f3134 375f3438 335f3634 37000000 36342d62 69742072 616e6765 3a202d39
+5f323233 5f333732 5f303336 5f383534 5f373735 5f383038 20746f20 395f3232
+335f3337 325f3033 365f3835 345f3737 355f3830 37000000 456e7465 72204120
+28686967 68207468 656e206c 6f77293a 00000000 456e7465 72204220 28686967
+68207468 656e206c 6f77293a 00000000 53756d3a 20000000 44696666 3a200000
+20000000 cccccc0c
+---
+0 - 41000108 - addi R8, R0, 264
+1 - d4000241 - jal func_main
+2 - fc000000 - halt
+func_print64:
+3 - 4042fff8 - addi R2, R2, -8
+4 - 80620004 - sw R3, 4(R2)
+5 - 80220000 - sw R1, 0(R2)
+6 - 40620004 - addi R3, R2, 4
+7 - 4042fff8 - addi R2, R2, -8
+8 - 8083fff8 - sw R4, -8(R3)
+9 - 80a3fff4 - sw R5, -12(R3)
+10 - 4d23fff8 - lw R9, -8(R3)
+11 - 4d43fff4 - lw R10, -12(R3)
+12 - 41600000 - addi R11, R0, 0
+13 - 4daa0000 - lw R13, 0(R10)
+14 - 1dcb0000 - slt R14, R11, R0
+15 - c5c00002 - bne R14, R0, index_trap3
+16 - 1deb6800 - slt R15, R11, R13
+17 - c5e00001 - bne R15, R0, index_ok2
+index_trap3:
+18 - f8000004 - trap 4
+index_ok2:
+19 - 41a00004 - addi R13, R0, 4
+20 - 09ad5800 - mul R13, R13, R11
+21 - 01ca6800 - add R14, R10, R13
+22 - 4d8e0004 - lw R12, 4(R14)
+23 - 00806000 - add R4, R0, R12
+24 - 4042fff4 - addi R2, R2, -12
+25 - 81220000 - sw R9, 0(R2)
+26 - 81420004 - sw R10, 4(R2)
+27 - 81820008 - sw R12, 8(R2)
+28 - d4000395 - jal rt_int_to_str
+29 - 4d220000 - lw R9, 0(R2)
+30 - 4d420004 - lw R10, 4(R2)
+31 - 4d820008 - lw R12, 8(R2)
+32 - 4042000c - addi R2, R2, 12
+33 - 01602000 - add R11, R0, R4
+34 - 00804800 - add R4, R0, R9
+35 - 4042fff4 - addi R2, R2, -12
+36 - 81220000 - sw R9, 0(R2)
+37 - 81420004 - sw R10, 4(R2)
+38 - 81620008 - sw R11, 8(R2)
+39 - 00a05800 - add R5, R0, R11
+40 - d4000353 - jal rt_concat
+41 - 4d220000 - lw R9, 0(R2)
+42 - 4d420004 - lw R10, 4(R2)
+43 - 4d620008 - lw R11, 8(R2)
+44 - 4042000c - addi R2, R2, 12
+45 - 01402000 - add R10, R0, R4
+46 - 41200100 - addi R9, R0, 256
+47 - 00805000 - add R4, R0, R10
+48 - 4042fff4 - addi R2, R2, -12
+49 - 81220000 - sw R9, 0(R2)
+50 - 81420004 - sw R10, 4(R2)
+51 - 81620008 - sw R11, 8(R2)
+52 - 00a04800 - add R5, R0, R9
+53 - d4000346 - jal rt_concat
+54 - 4d220000 - lw R9, 0(R2)
+55 - 4d420004 - lw R10, 4(R2)
+56 - 4d620008 - lw R11, 8(R2)
+57 - 4042000c - addi R2, R2, 12
+58 - 01602000 - add R11, R0, R4
+59 - 4d23fff4 - lw R9, -12(R3)
+60 - 41400001 - addi R10, R0, 1
+61 - 4da90000 - lw R13, 0(R9)
+62 - 1dca0000 - slt R14, R10, R0
+63 - c5c00002 - bne R14, R0, index_trap5
+64 - 1dea6800 - slt R15, R10, R13
+65 - c5e00001 - bne R15, R0, index_ok4
+index_trap5:
+66 - f8000004 - trap 4
+index_ok4:
+67 - 41a00004 - addi R13, R0, 4
+68 - 09ad5000 - mul R13, R13, R10
+69 - 01c96800 - add R14, R9, R13
+70 - 4d8e0004 - lw R12, 4(R14)
+71 - 00806000 - add R4, R0, R12
+72 - 4042fff4 - addi R2, R2, -12
+73 - 81220000 - sw R9, 0(R2)
+74 - 81620004 - sw R11, 4(R2)
+75 - 81820008 - sw R12, 8(R2)
+76 - d4000365 - jal rt_int_to_str
+77 - 4d220000 - lw R9, 0(R2)
+78 - 4d620004 - lw R11, 4(R2)
+79 - 4d820008 - lw R12, 8(R2)
+80 - 4042000c - addi R2, R2, 12
+81 - 01402000 - add R10, R0, R4
+82 - 00805800 - add R4, R0, R11
+83 - 4042fff4 - addi R2, R2, -12
+84 - 81220000 - sw R9, 0(R2)
+85 - 81420004 - sw R10, 4(R2)
+86 - 81620008 - sw R11, 8(R2)
+87 - 00a05000 - add R5, R0, R10
+88 - d4000323 - jal rt_concat
+89 - 4d220000 - lw R9, 0(R2)
+90 - 4d420004 - lw R10, 4(R2)
+91 - 4d620008 - lw R11, 8(R2)
+92 - 4042000c - addi R2, R2, 12
+93 - 01202000 - add R9, R0, R4
+94 - 00890000 - add R4, R9, R0
+95 - 4042fffc - addi R2, R2, -4
+96 - 81220000 - sw R9, 0(R2)
+97 - d40002cf - jal rt_println_str
+98 - 4d220000 - lw R9, 0(R2)
+99 - 40420004 - addi R2, R2, 4
+100 - 01200000 - add R9, R0, R0
+101 - 00800000 - add R4, R0, R0
+return_print641:
+102 - 4c23fffc - lw R1, -4(R3)
+103 - 4d230000 - lw R9, 0(R3)
+104 - 40430004 - addi R2, R3, 4
+105 - 00690000 - add R3, R9, R0
+106 - 58010000 - jr R1
+func_add64:
+107 - 4042fff8 - addi R2, R2, -8
+108 - 80620004 - sw R3, 4(R2)
+109 - 80220000 - sw R1, 0(R2)
+110 - 40620004 - addi R3, R2, 4
+111 - 4042fff0 - addi R2, R2, -16
+112 - 8083fff8 - sw R4, -8(R3)
+113 - 80a3fff4 - sw R5, -12(R3)
+114 - 41200002 - addi R9, R0, 2
+115 - 01480000 - add R10, R8, R0
+116 - 1d890000 - slt R12, R9, R0
+117 - c1800001 - beq R12, R0, new_ok7
+118 - f800000a - trap 10
+new_ok7:
+119 - 45a00003 - lui R13, 3
+120 - 49adffff - ori R13, 65535
+121 - 1d6d4800 - slt R11, R13, R9
+122 - c5600007 - bne R11, R0, new_too_large8
+123 - 41600004 - addi R11, R0, 4
+124 - 096b4800 - mul R11, R11, R9
+125 - 416b0004 - addi R11, R11, 4
+126 - 01085800 - add R8, R8, R11
+127 - 1d685000 - slt R11, R8, R10
+128 - c5600002 - bne R11, R0, new_wrapped9
+129 - d0000002 - jmp new_allocation_ok10
+new_too_large8:
+130 - f8000003 - trap 3
+new_wrapped9:
+131 - f8000003 - trap 3
+new_allocation_ok10:
+132 - 1dc24000 - slt R14, R2, R8
+133 - c1c00001 - beq R14, R0, heap_safe11
+134 - f8000003 - trap 3
+heap_safe11:
+135 - 812a0000 - sw R9, 0(R10)
+136 - 41e00000 - addi R15, R0, 0
+137 - 420a0004 - addi R16, R10, 4
+new_zero_loop12:
+138 - 1d6f4800 - slt R11, R15, R9
+139 - c1600004 - beq R11, R0, new_zero_done13
+140 - 80100000 - sw R0, 0(R16)
+141 - 42100004 - addi R16, R16, 4
+142 - 41ef0001 - addi R15, R15, 1
+143 - d3fffffa - jmp new_zero_loop12
+new_zero_done13:
+144 - 8143fff0 - sw R10, -16(R3)
+145 - 4d23fff8 - lw R9, -8(R3)
+146 - 41400001 - addi R10, R0, 1
+147 - 4d890000 - lw R12, 0(R9)
+148 - 1daa0000 - slt R13, R10, R0
+149 - c5a00002 - bne R13, R0, index_trap15
+150 - 1dca6000 - slt R14, R10, R12
+151 - c5c00001 - bne R14, R0, index_ok14
+index_trap15:
+152 - f8000004 - trap 4
+index_ok14:
+153 - 41800004 - addi R12, R0, 4
+154 - 098c5000 - mul R12, R12, R10
+155 - 01a96000 - add R13, R9, R12
+156 - 4d6d0004 - lw R11, 4(R13)
+157 - 4d23fff4 - lw R9, -12(R3)
+158 - 41400001 - addi R10, R0, 1
+159 - 4da90000 - lw R13, 0(R9)
+160 - 1dca0000 - slt R14, R10, R0
+161 - c5c00002 - bne R14, R0, index_trap17
+162 - 1dea6800 - slt R15, R10, R13
+163 - c5e00001 - bne R15, R0, index_ok16
+index_trap17:
+164 - f8000004 - trap 4
+index_ok16:
+165 - 41a00004 - addi R13, R0, 4
+166 - 09ad5000 - mul R13, R13, R10
+167 - 01c96800 - add R14, R9, R13
+168 - 4d8e0004 - lw R12, 4(R14)
+169 - 012b6000 - add R9, R11, R12
+170 - 41400001 - addi R10, R0, 1
+171 - 4d63fff0 - lw R11, -16(R3)
+172 - 4d8b0000 - lw R12, 0(R11)
+173 - 1daa0000 - slt R13, R10, R0
+174 - c5a00002 - bne R13, R0, index_trap19
+175 - 1dca6000 - slt R14, R10, R12
+176 - c5c00001 - bne R14, R0, index_ok18
+index_trap19:
+177 - f8000004 - trap 4
+index_ok18:
+178 - 41a00004 - addi R13, R0, 4
+179 - 09ad5000 - mul R13, R13, R10
+180 - 01ab6800 - add R13, R11, R13
+181 - 812d0004 - sw R9, 4(R13)
+182 - 4d23fff8 - lw R9, -8(R3)
+183 - 41400000 - addi R10, R0, 0
+184 - 4d890000 - lw R12, 0(R9)
+185 - 1daa0000 - slt R13, R10, R0
+186 - c5a00002 - bne R13, R0, index_trap21
+187 - 1dca6000 - slt R14, R10, R12
+188 - c5c00001 - bne R14, R0, index_ok20
+index_trap21:
+189 - f8000004 - trap 4
+index_ok20:
+190 - 41800004 - addi R12, R0, 4
+191 - 098c5000 - mul R12, R12, R10
+192 - 01a96000 - add R13, R9, R12
+193 - 4d6d0004 - lw R11, 4(R13)
+194 - 4d23fff4 - lw R9, -12(R3)
+195 - 41400000 - addi R10, R0, 0
+196 - 4da90000 - lw R13, 0(R9)
+197 - 1dca0000 - slt R14, R10, R0
+198 - c5c00002 - bne R14, R0, index_trap23
+199 - 1dea6800 - slt R15, R10, R13
+200 - c5e00001 - bne R15, R0, index_ok22
+index_trap23:
+201 - f8000004 - trap 4
+index_ok22:
+202 - 41a00004 - addi R13, R0, 4
+203 - 09ad5000 - mul R13, R13, R10
+204 - 01c96800 - add R14, R9, R13
+205 - 4d8e0004 - lw R12, 4(R14)
+206 - 012b6000 - add R9, R11, R12
+207 - 41400000 - addi R10, R0, 0
+208 - 4d63fff0 - lw R11, -16(R3)
+209 - 4d8b0000 - lw R12, 0(R11)
+210 - 1daa0000 - slt R13, R10, R0
+211 - c5a00002 - bne R13, R0, index_trap25
+212 - 1dca6000 - slt R14, R10, R12
+213 - c5c00001 - bne R14, R0, index_ok24
+index_trap25:
+214 - f8000004 - trap 4
+index_ok24:
+215 - 41a00004 - addi R13, R0, 4
+216 - 09ad5000 - mul R13, R13, R10
+217 - 01ab6800 - add R13, R11, R13
+218 - 812d0004 - sw R9, 4(R13)
+219 - 41200000 - addi R9, R0, 0
+220 - 8123ffec - sw R9, -20(R3)
+221 - 4d23fff8 - lw R9, -8(R3)
+222 - 41400001 - addi R10, R0, 1
+223 - 4d890000 - lw R12, 0(R9)
+224 - 1daa0000 - slt R13, R10, R0
+225 - c5a00002 - bne R13, R0, index_trap27
+226 - 1dca6000 - slt R14, R10, R12
+227 - c5c00001 - bne R14, R0, index_ok26
+index_trap27:
+228 - f8000004 - trap 4
+index_ok26:
+229 - 41800004 - addi R12, R0, 4
+230 - 098c5000 - mul R12, R12, R10
+231 - 01a96000 - add R13, R9, R12
+232 - 4d6d0004 - lw R11, 4(R13)
+233 - 41200000 - addi R9, R0, 0
+234 - 1d4b4800 - slt R10, R11, R9
+235 - c1400024 - beq R10, R0, else28
+236 - 4d23fff4 - lw R9, -12(R3)
+237 - 41400001 - addi R10, R0, 1
+238 - 4d890000 - lw R12, 0(R9)
+239 - 1daa0000 - slt R13, R10, R0
+240 - c5a00002 - bne R13, R0, index_trap31
+241 - 1dca6000 - slt R14, R10, R12
+242 - c5c00001 - bne R14, R0, index_ok30
+index_trap31:
+243 - f8000004 - trap 4
+index_ok30:
+244 - 41800004 - addi R12, R0, 4
+245 - 098c5000 - mul R12, R12, R10
+246 - 01a96000 - add R13, R9, R12
+247 - 4d6d0004 - lw R11, 4(R13)
+248 - 41200000 - addi R9, R0, 0
+249 - 1d4b4800 - slt R10, R11, R9
+250 - 4d23fff0 - lw R9, -16(R3)
+251 - 41600001 - addi R11, R0, 1
+252 - 4da90000 - lw R13, 0(R9)
+253 - 1dcb0000 - slt R14, R11, R0
+254 - c5c00002 - bne R14, R0, index_trap33
+255 - 1deb6800 - slt R15, R11, R13
+256 - c5e00001 - bne R15, R0, index_ok32
+index_trap33:
+257 - f8000004 - trap 4
+index_ok32:
+258 - 41a00004 - addi R13, R0, 4
+259 - 09ad5800 - mul R13, R13, R11
+260 - 01c96800 - add R14, R9, R13
+261 - 4d8e0004 - lw R12, 4(R14)
+262 - 41200000 - addi R9, R0, 0
+263 - 1d6c4800 - slt R11, R12, R9
+264 - 41a00001 - addi R13, R0, 1
+265 - 056d5800 - sub R11, R13, R11
+266 - 192a5800 - or R9, R10, R11
+267 - c1200003 - beq R9, R0, else34
+268 - 41200001 - addi R9, R0, 1
+269 - 8123ffec - sw R9, -20(R3)
+270 - d0000000 - jmp endif35
+else34:
+endif35:
+271 - d0000023 - jmp endif29
+else28:
+272 - 4d23fff4 - lw R9, -12(R3)
+273 - 41400001 - addi R10, R0, 1
+274 - 4d890000 - lw R12, 0(R9)
+275 - 1daa0000 - slt R13, R10, R0
+276 - c5a00002 - bne R13, R0, index_trap37
+277 - 1dca6000 - slt R14, R10, R12
+278 - c5c00001 - bne R14, R0, index_ok36
+index_trap37:
+279 - f8000004 - trap 4
+index_ok36:
+280 - 41800004 - addi R12, R0, 4
+281 - 098c5000 - mul R12, R12, R10
+282 - 01a96000 - add R13, R9, R12
+283 - 4d6d0004 - lw R11, 4(R13)
+284 - 41200000 - addi R9, R0, 0
+285 - 1d4b4800 - slt R10, R11, R9
+286 - 4d23fff0 - lw R9, -16(R3)
+287 - 41600001 - addi R11, R0, 1
+288 - 4da90000 - lw R13, 0(R9)
+289 - 1dcb0000 - slt R14, R11, R0
+290 - c5c00002 - bne R14, R0, index_trap39
+291 - 1deb6800 - slt R15, R11, R13
+292 - c5e00001 - bne R15, R0, index_ok38
+index_trap39:
+293 - f8000004 - trap 4
+index_ok38:
+294 - 41a00004 - addi R13, R0, 4
+295 - 09ad5800 - mul R13, R13, R11
+296 - 01c96800 - add R14, R9, R13
+297 - 4d8e0004 - lw R12, 4(R14)
+298 - 41200000 - addi R9, R0, 0
+299 - 1d6c4800 - slt R11, R12, R9
+300 - 41a00001 - addi R13, R0, 1
+301 - 056d5800 - sub R11, R13, R11
+302 - 152a5800 - and R9, R10, R11
+303 - c1200003 - beq R9, R0, else40
+304 - 41200001 - addi R9, R0, 1
+305 - 8123ffec - sw R9, -20(R3)
+306 - d0000000 - jmp endif41
+else40:
+endif41:
+endif29:
+307 - 4d23ffec - lw R9, -20(R3)
+308 - c1200010 - beq R9, R0, else42
+309 - 41200001 - addi R9, R0, 1
+310 - 41400000 - addi R10, R0, 0
+311 - 4d63fff0 - lw R11, -16(R3)
+312 - 4d8b0000 - lw R12, 0(R11)
+313 - 1daa0000 - slt R13, R10, R0
+314 - c5a00002 - bne R13, R0, index_trap45
+315 - 1dca6000 - slt R14, R10, R12
+316 - c5c00001 - bne R14, R0, index_ok44
+index_trap45:
+317 - f8000004 - trap 4
+index_ok44:
+318 - 41a00004 - addi R13, R0, 4
+319 - 09ad5000 - mul R13, R13, R10
+320 - 01ab6800 - add R13, R11, R13
+321 - 4dcd0004 - lw R14, 4(R13)
+322 - 01ee4800 - add R15, R14, R9
+323 - 81ed0004 - sw R15, 4(R13)
+324 - d0000000 - jmp endif43
+else42:
+endif43:
+325 - 4d23fff0 - lw R9, -16(R3)
+326 - 00890000 - add R4, R9, R0
+327 - d0000000 - jmp return_add646
+return_add646:
+328 - 4c23fffc - lw R1, -4(R3)
+329 - 4d230000 - lw R9, 0(R3)
+330 - 40430004 - addi R2, R3, 4
+331 - 00690000 - add R3, R9, R0
+332 - 58010000 - jr R1
+func_sub64:
+333 - 4042fff8 - addi R2, R2, -8
+334 - 80620004 - sw R3, 4(R2)
+335 - 80220000 - sw R1, 0(R2)
+336 - 40620004 - addi R3, R2, 4
+337 - 4042fff0 - addi R2, R2, -16
+338 - 8083fff8 - sw R4, -8(R3)
+339 - 80a3fff4 - sw R5, -12(R3)
+340 - 41200002 - addi R9, R0, 2
+341 - 01480000 - add R10, R8, R0
+342 - 1d890000 - slt R12, R9, R0
+343 - c1800001 - beq R12, R0, new_ok47
+344 - f800000a - trap 10
+new_ok47:
+345 - 45a00003 - lui R13, 3
+346 - 49adffff - ori R13, 65535
+347 - 1d6d4800 - slt R11, R13, R9
+348 - c5600007 - bne R11, R0, new_too_large48
+349 - 41600004 - addi R11, R0, 4
+350 - 096b4800 - mul R11, R11, R9
+351 - 416b0004 - addi R11, R11, 4
+352 - 01085800 - add R8, R8, R11
+353 - 1d685000 - slt R11, R8, R10
+354 - c5600002 - bne R11, R0, new_wrapped49
+355 - d0000002 - jmp new_allocation_ok50
+new_too_large48:
+356 - f8000003 - trap 3
+new_wrapped49:
+357 - f8000003 - trap 3
+new_allocation_ok50:
+358 - 1dc24000 - slt R14, R2, R8
+359 - c1c00001 - beq R14, R0, heap_safe51
+360 - f8000003 - trap 3
+heap_safe51:
+361 - 812a0000 - sw R9, 0(R10)
+362 - 41e00000 - addi R15, R0, 0
+363 - 420a0004 - addi R16, R10, 4
+new_zero_loop52:
+364 - 1d6f4800 - slt R11, R15, R9
+365 - c1600004 - beq R11, R0, new_zero_done53
+366 - 80100000 - sw R0, 0(R16)
+367 - 42100004 - addi R16, R16, 4
+368 - 41ef0001 - addi R15, R15, 1
+369 - d3fffffa - jmp new_zero_loop52
+new_zero_done53:
+370 - 8143fff0 - sw R10, -16(R3)
+371 - 4d23fff8 - lw R9, -8(R3)
+372 - 41400001 - addi R10, R0, 1
+373 - 4d890000 - lw R12, 0(R9)
+374 - 1daa0000 - slt R13, R10, R0
+375 - c5a00002 - bne R13, R0, index_trap55
+376 - 1dca6000 - slt R14, R10, R12
+377 - c5c00001 - bne R14, R0, index_ok54
+index_trap55:
+378 - f8000004 - trap 4
+index_ok54:
+379 - 41800004 - addi R12, R0, 4
+380 - 098c5000 - mul R12, R12, R10
+381 - 01a96000 - add R13, R9, R12
+382 - 4d6d0004 - lw R11, 4(R13)
+383 - 4d23fff4 - lw R9, -12(R3)
+384 - 41400001 - addi R10, R0, 1
+385 - 4da90000 - lw R13, 0(R9)
+386 - 1dca0000 - slt R14, R10, R0
+387 - c5c00002 - bne R14, R0, index_trap57
+388 - 1dea6800 - slt R15, R10, R13
+389 - c5e00001 - bne R15, R0, index_ok56
+index_trap57:
+390 - f8000004 - trap 4
+index_ok56:
+391 - 41a00004 - addi R13, R0, 4
+392 - 09ad5000 - mul R13, R13, R10
+393 - 01c96800 - add R14, R9, R13
+394 - 4d8e0004 - lw R12, 4(R14)
+395 - 052b6000 - sub R9, R11, R12
+396 - 41400001 - addi R10, R0, 1
+397 - 4d63fff0 - lw R11, -16(R3)
+398 - 4d8b0000 - lw R12, 0(R11)
+399 - 1daa0000 - slt R13, R10, R0
+400 - c5a00002 - bne R13, R0, index_trap59
+401 - 1dca6000 - slt R14, R10, R12
+402 - c5c00001 - bne R14, R0, index_ok58
+index_trap59:
+403 - f8000004 - trap 4
+index_ok58:
+404 - 41a00004 - addi R13, R0, 4
+405 - 09ad5000 - mul R13, R13, R10
+406 - 01ab6800 - add R13, R11, R13
+407 - 812d0004 - sw R9, 4(R13)
+408 - 4d23fff8 - lw R9, -8(R3)
+409 - 41400000 - addi R10, R0, 0
+410 - 4d890000 - lw R12, 0(R9)
+411 - 1daa0000 - slt R13, R10, R0
+412 - c5a00002 - bne R13, R0, index_trap61
+413 - 1dca6000 - slt R14, R10, R12
+414 - c5c00001 - bne R14, R0, index_ok60
+index_trap61:
+415 - f8000004 - trap 4
+index_ok60:
+416 - 41800004 - addi R12, R0, 4
+417 - 098c5000 - mul R12, R12, R10
+418 - 01a96000 - add R13, R9, R12
+419 - 4d6d0004 - lw R11, 4(R13)
+420 - 4d23fff4 - lw R9, -12(R3)
+421 - 41400000 - addi R10, R0, 0
+422 - 4da90000 - lw R13, 0(R9)
+423 - 1dca0000 - slt R14, R10, R0
+424 - c5c00002 - bne R14, R0, index_trap63
+425 - 1dea6800 - slt R15, R10, R13
+426 - c5e00001 - bne R15, R0, index_ok62
+index_trap63:
+427 - f8000004 - trap 4
+index_ok62:
+428 - 41a00004 - addi R13, R0, 4
+429 - 09ad5000 - mul R13, R13, R10
+430 - 01c96800 - add R14, R9, R13
+431 - 4d8e0004 - lw R12, 4(R14)
+432 - 052b6000 - sub R9, R11, R12
+433 - 41400000 - addi R10, R0, 0
+434 - 4d63fff0 - lw R11, -16(R3)
+435 - 4d8b0000 - lw R12, 0(R11)
+436 - 1daa0000 - slt R13, R10, R0
+437 - c5a00002 - bne R13, R0, index_trap65
+438 - 1dca6000 - slt R14, R10, R12
+439 - c5c00001 - bne R14, R0, index_ok64
+index_trap65:
+440 - f8000004 - trap 4
+index_ok64:
+441 - 41a00004 - addi R13, R0, 4
+442 - 09ad5000 - mul R13, R13, R10
+443 - 01ab6800 - add R13, R11, R13
+444 - 812d0004 - sw R9, 4(R13)
+445 - 41200000 - addi R9, R0, 0
+446 - 8123ffec - sw R9, -20(R3)
+447 - 4d23fff8 - lw R9, -8(R3)
+448 - 41400001 - addi R10, R0, 1
+449 - 4d890000 - lw R12, 0(R9)
+450 - 1daa0000 - slt R13, R10, R0
+451 - c5a00002 - bne R13, R0, index_trap67
+452 - 1dca6000 - slt R14, R10, R12
+453 - c5c00001 - bne R14, R0, index_ok66
+index_trap67:
+454 - f8000004 - trap 4
+index_ok66:
+455 - 41800004 - addi R12, R0, 4
+456 - 098c5000 - mul R12, R12, R10
+457 - 01a96000 - add R13, R9, R12
+458 - 4d6d0004 - lw R11, 4(R13)
+459 - 41200000 - addi R9, R0, 0
+460 - 1d4b4800 - slt R10, R11, R9
+461 - 41800001 - addi R12, R0, 1
+462 - 054c5000 - sub R10, R12, R10
+463 - c140002d - beq R10, R0, else68
+464 - 4d23fff4 - lw R9, -12(R3)
+465 - 41400001 - addi R10, R0, 1
+466 - 4d890000 - lw R12, 0(R9)
+467 - 1daa0000 - slt R13, R10, R0
+468 - c5a00002 - bne R13, R0, index_trap71
+469 - 1dca6000 - slt R14, R10, R12
+470 - c5c00001 - bne R14, R0, index_ok70
+index_trap71:
+471 - f8000004 - trap 4
+index_ok70:
+472 - 41800004 - addi R12, R0, 4
+473 - 098c5000 - mul R12, R12, R10
+474 - 01a96000 - add R13, R9, R12
+475 - 4d6d0004 - lw R11, 4(R13)
+476 - 41200000 - addi R9, R0, 0
+477 - 1d4b4800 - slt R10, R11, R9
+478 - 4d23fff8 - lw R9, -8(R3)
+479 - 41600001 - addi R11, R0, 1
+480 - 4da90000 - lw R13, 0(R9)
+481 - 1dcb0000 - slt R14, R11, R0
+482 - c5c00002 - bne R14, R0, index_trap73
+483 - 1deb6800 - slt R15, R11, R13
+484 - c5e00001 - bne R15, R0, index_ok72
+index_trap73:
+485 - f8000004 - trap 4
+index_ok72:
+486 - 41a00004 - addi R13, R0, 4
+487 - 09ad5800 - mul R13, R13, R11
+488 - 01c96800 - add R14, R9, R13
+489 - 4d8e0004 - lw R12, 4(R14)
+490 - 4d23fff4 - lw R9, -12(R3)
+491 - 41600001 - addi R11, R0, 1
+492 - 4dc90000 - lw R14, 0(R9)
+493 - 1deb0000 - slt R15, R11, R0
+494 - c5e00002 - bne R15, R0, index_trap75
+495 - 1e0b7000 - slt R16, R11, R14
+496 - c6000001 - bne R16, R0, index_ok74
+index_trap75:
+497 - f8000004 - trap 4
+index_ok74:
+498 - 41c00004 - addi R14, R0, 4
+499 - 09ce5800 - mul R14, R14, R11
+500 - 01e97000 - add R15, R9, R14
+501 - 4daf0004 - lw R13, 4(R15)
+502 - 1d2c6800 - slt R9, R12, R13
+503 - 196a4800 - or R11, R10, R9
+504 - c1600003 - beq R11, R0, else76
+505 - 41200001 - addi R9, R0, 1
+506 - 8123ffec - sw R9, -20(R3)
+507 - d0000000 - jmp endif77
+else76:
+endif77:
+508 - d000002c - jmp endif69
+else68:
+509 - 4d23fff4 - lw R9, -12(R3)
+510 - 41400001 - addi R10, R0, 1
+511 - 4d890000 - lw R12, 0(R9)
+512 - 1daa0000 - slt R13, R10, R0
+513 - c5a00002 - bne R13, R0, index_trap79
+514 - 1dca6000 - slt R14, R10, R12
+515 - c5c00001 - bne R14, R0, index_ok78
+index_trap79:
+516 - f8000004 - trap 4
+index_ok78:
+517 - 41800004 - addi R12, R0, 4
+518 - 098c5000 - mul R12, R12, R10
+519 - 01a96000 - add R13, R9, R12
+520 - 4d6d0004 - lw R11, 4(R13)
+521 - 41200000 - addi R9, R0, 0
+522 - 1d4b4800 - slt R10, R11, R9
+523 - 4d23fff8 - lw R9, -8(R3)
+524 - 41600001 - addi R11, R0, 1
+525 - 4da90000 - lw R13, 0(R9)
+526 - 1dcb0000 - slt R14, R11, R0
+527 - c5c00002 - bne R14, R0, index_trap81
+528 - 1deb6800 - slt R15, R11, R13
+529 - c5e00001 - bne R15, R0, index_ok80
+index_trap81:
+530 - f8000004 - trap 4
+index_ok80:
+531 - 41a00004 - addi R13, R0, 4
+532 - 09ad5800 - mul R13, R13, R11
+533 - 01c96800 - add R14, R9, R13
+534 - 4d8e0004 - lw R12, 4(R14)
+535 - 4d23fff4 - lw R9, -12(R3)
+536 - 41600001 - addi R11, R0, 1
+537 - 4dc90000 - lw R14, 0(R9)
+538 - 1deb0000 - slt R15, R11, R0
+539 - c5e00002 - bne R15, R0, index_trap83
+540 - 1e0b7000 - slt R16, R11, R14
+541 - c6000001 - bne R16, R0, index_ok82
+index_trap83:
+542 - f8000004 - trap 4
+index_ok82:
+543 - 41c00004 - addi R14, R0, 4
+544 - 09ce5800 - mul R14, R14, R11
+545 - 01e97000 - add R15, R9, R14
+546 - 4daf0004 - lw R13, 4(R15)
+547 - 1d2c6800 - slt R9, R12, R13
+548 - 156a4800 - and R11, R10, R9
+549 - c1600003 - beq R11, R0, else84
+550 - 41200001 - addi R9, R0, 1
+551 - 8123ffec - sw R9, -20(R3)
+552 - d0000000 - jmp endif85
+else84:
+endif85:
+endif69:
+553 - 4d23ffec - lw R9, -20(R3)
+554 - c1200010 - beq R9, R0, else86
+555 - 41200001 - addi R9, R0, 1
+556 - 41400000 - addi R10, R0, 0
+557 - 4d63fff0 - lw R11, -16(R3)
+558 - 4d8b0000 - lw R12, 0(R11)
+559 - 1daa0000 - slt R13, R10, R0
+560 - c5a00002 - bne R13, R0, index_trap89
+561 - 1dca6000 - slt R14, R10, R12
+562 - c5c00001 - bne R14, R0, index_ok88
+index_trap89:
+563 - f8000004 - trap 4
+index_ok88:
+564 - 41a00004 - addi R13, R0, 4
+565 - 09ad5000 - mul R13, R13, R10
+566 - 01ab6800 - add R13, R11, R13
+567 - 4dcd0004 - lw R14, 4(R13)
+568 - 05ee4800 - sub R15, R14, R9
+569 - 81ed0004 - sw R15, 4(R13)
+570 - d0000000 - jmp endif87
+else86:
+endif87:
+571 - 4d23fff0 - lw R9, -16(R3)
+572 - 00890000 - add R4, R9, R0
+573 - d0000000 - jmp return_sub6446
+return_sub6446:
+574 - 4c23fffc - lw R1, -4(R3)
+575 - 4d230000 - lw R9, 0(R3)
+576 - 40430004 - addi R2, R3, 4
+577 - 00690000 - add R3, R9, R0
+578 - 58010000 - jr R1
+func_main:
+579 - 4042fff8 - addi R2, R2, -8
+580 - 80620004 - sw R3, 4(R2)
+581 - 80220000 - sw R1, 0(R2)
+582 - 40620004 - addi R3, R2, 4
+583 - 4042fff8 - addi R2, R2, -8
+584 - 41200024 - addi R9, R0, 36
+585 - 00890000 - add R4, R9, R0
+586 - 4042fffc - addi R2, R2, -4
+587 - 81220000 - sw R9, 0(R2)
+588 - d40000e4 - jal rt_println_str
+589 - 4d220000 - lw R9, 0(R2)
+590 - 40420004 - addi R2, R2, 4
+591 - 01200000 - add R9, R0, R0
+592 - 41200040 - addi R9, R0, 64
+593 - 00890000 - add R4, R9, R0
+594 - 4042fffc - addi R2, R2, -4
+595 - 81220000 - sw R9, 0(R2)
+596 - d40000dc - jal rt_println_str
+597 - 4d220000 - lw R9, 0(R2)
+598 - 40420004 - addi R2, R2, 4
+599 - 01200000 - add R9, R0, R0
+600 - 41200070 - addi R9, R0, 112
+601 - 00890000 - add R4, R9, R0
+602 - 4042fffc - addi R2, R2, -4
+603 - 81220000 - sw R9, 0(R2)
+604 - d40000d4 - jal rt_println_str
+605 - 4d220000 - lw R9, 0(R2)
+606 - 40420004 - addi R2, R2, 4
+607 - 01200000 - add R9, R0, R0
+608 - 4120000a - addi R9, R0, 10
+609 - 89200001 - out R9, 1
+610 - 01200000 - add R9, R0, R0
+611 - 41200002 - addi R9, R0, 2
+612 - 01480000 - add R10, R8, R0
+613 - 1d890000 - slt R12, R9, R0
+614 - c1800001 - beq R12, R0, new_ok91
+615 - f800000a - trap 10
+new_ok91:
+616 - 45a00003 - lui R13, 3
+617 - 49adffff - ori R13, 65535
+618 - 1d6d4800 - slt R11, R13, R9
+619 - c5600007 - bne R11, R0, new_too_large92
+620 - 41600004 - addi R11, R0, 4
+621 - 096b4800 - mul R11, R11, R9
+622 - 416b0004 - addi R11, R11, 4
+623 - 01085800 - add R8, R8, R11
+624 - 1d685000 - slt R11, R8, R10
+625 - c5600002 - bne R11, R0, new_wrapped93
+626 - d0000002 - jmp new_allocation_ok94
+new_too_large92:
+627 - f8000003 - trap 3
+new_wrapped93:
+628 - f8000003 - trap 3
+new_allocation_ok94:
+629 - 1dc24000 - slt R14, R2, R8
+630 - c1c00001 - beq R14, R0, heap_safe95
+631 - f8000003 - trap 3
+heap_safe95:
+632 - 812a0000 - sw R9, 0(R10)
+633 - 41e00000 - addi R15, R0, 0
+634 - 420a0004 - addi R16, R10, 4
+new_zero_loop96:
+635 - 1d6f4800 - slt R11, R15, R9
+636 - c1600004 - beq R11, R0, new_zero_done97
+637 - 80100000 - sw R0, 0(R16)
+638 - 42100004 - addi R16, R16, 4
+639 - 41ef0001 - addi R15, R15, 1
+640 - d3fffffa - jmp new_zero_loop96
+new_zero_done97:
+641 - 8143fff8 - sw R10, -8(R3)
+642 - 41200002 - addi R9, R0, 2
+643 - 01480000 - add R10, R8, R0
+644 - 1d890000 - slt R12, R9, R0
+645 - c1800001 - beq R12, R0, new_ok98
+646 - f800000a - trap 10
+new_ok98:
+647 - 45a00003 - lui R13, 3
+648 - 49adffff - ori R13, 65535
+649 - 1d6d4800 - slt R11, R13, R9
+650 - c5600007 - bne R11, R0, new_too_large99
+651 - 41600004 - addi R11, R0, 4
+652 - 096b4800 - mul R11, R11, R9
+653 - 416b0004 - addi R11, R11, 4
+654 - 01085800 - add R8, R8, R11
+655 - 1d685000 - slt R11, R8, R10
+656 - c5600002 - bne R11, R0, new_wrapped100
+657 - d0000002 - jmp new_allocation_ok101
+new_too_large99:
+658 - f8000003 - trap 3
+new_wrapped100:
+659 - f8000003 - trap 3
+new_allocation_ok101:
+660 - 1dc24000 - slt R14, R2, R8
+661 - c1c00001 - beq R14, R0, heap_safe102
+662 - f8000003 - trap 3
+heap_safe102:
+663 - 812a0000 - sw R9, 0(R10)
+664 - 41e00000 - addi R15, R0, 0
+665 - 420a0004 - addi R16, R10, 4
+new_zero_loop103:
+666 - 1d6f4800 - slt R11, R15, R9
+667 - c1600004 - beq R11, R0, new_zero_done104
+668 - 80100000 - sw R0, 0(R16)
+669 - 42100004 - addi R16, R16, 4
+670 - 41ef0001 - addi R15, R15, 1
+671 - d3fffffa - jmp new_zero_loop103
+new_zero_done104:
+672 - 8143fff4 - sw R10, -12(R3)
+673 - 412000b8 - addi R9, R0, 184
+674 - 00890000 - add R4, R9, R0
+675 - 4042fffc - addi R2, R2, -4
+676 - 81220000 - sw R9, 0(R2)
+677 - d400008b - jal rt_println_str
+678 - 4d220000 - lw R9, 0(R2)
+679 - 40420004 - addi R2, R2, 4
+680 - 01200000 - add R9, R0, R0
+681 - d4000094 - jal rt_input_int
+682 - 01240000 - add R9, R4, R0
+683 - 41400000 - addi R10, R0, 0
+684 - 4d63fff8 - lw R11, -8(R3)
+685 - 4d8b0000 - lw R12, 0(R11)
+686 - 1daa0000 - slt R13, R10, R0
+687 - c5a00002 - bne R13, R0, index_trap106
+688 - 1dca6000 - slt R14, R10, R12
+689 - c5c00001 - bne R14, R0, index_ok105
+index_trap106:
+690 - f8000004 - trap 4
+index_ok105:
+691 - 41a00004 - addi R13, R0, 4
+692 - 09ad5000 - mul R13, R13, R10
+693 - 01ab6800 - add R13, R11, R13
+694 - 812d0004 - sw R9, 4(R13)
+695 - d4000086 - jal rt_input_int
+696 - 01240000 - add R9, R4, R0
+697 - 41400001 - addi R10, R0, 1
+698 - 4d63fff8 - lw R11, -8(R3)
+699 - 4d8b0000 - lw R12, 0(R11)
+700 - 1daa0000 - slt R13, R10, R0
+701 - c5a00002 - bne R13, R0, index_trap108
+702 - 1dca6000 - slt R14, R10, R12
+703 - c5c00001 - bne R14, R0, index_ok107
+index_trap108:
+704 - f8000004 - trap 4
+index_ok107:
+705 - 41a00004 - addi R13, R0, 4
+706 - 09ad5000 - mul R13, R13, R10
+707 - 01ab6800 - add R13, R11, R13
+708 - 812d0004 - sw R9, 4(R13)
+709 - 412000d4 - addi R9, R0, 212
+710 - 00890000 - add R4, R9, R0
+711 - 4042fffc - addi R2, R2, -4
+712 - 81220000 - sw R9, 0(R2)
+713 - d4000067 - jal rt_println_str
+714 - 4d220000 - lw R9, 0(R2)
+715 - 40420004 - addi R2, R2, 4
+716 - 01200000 - add R9, R0, R0
+717 - d4000070 - jal rt_input_int
+718 - 01240000 - add R9, R4, R0
+719 - 41400000 - addi R10, R0, 0
+720 - 4d63fff4 - lw R11, -12(R3)
+721 - 4d8b0000 - lw R12, 0(R11)
+722 - 1daa0000 - slt R13, R10, R0
+723 - c5a00002 - bne R13, R0, index_trap110
+724 - 1dca6000 - slt R14, R10, R12
+725 - c5c00001 - bne R14, R0, index_ok109
+index_trap110:
+726 - f8000004 - trap 4
+index_ok109:
+727 - 41a00004 - addi R13, R0, 4
+728 - 09ad5000 - mul R13, R13, R10
+729 - 01ab6800 - add R13, R11, R13
+730 - 812d0004 - sw R9, 4(R13)
+731 - d4000062 - jal rt_input_int
+732 - 01240000 - add R9, R4, R0
+733 - 41400001 - addi R10, R0, 1
+734 - 4d63fff4 - lw R11, -12(R3)
+735 - 4d8b0000 - lw R12, 0(R11)
+736 - 1daa0000 - slt R13, R10, R0
+737 - c5a00002 - bne R13, R0, index_trap112
+738 - 1dca6000 - slt R14, R10, R12
+739 - c5c00001 - bne R14, R0, index_ok111
+index_trap112:
+740 - f8000004 - trap 4
+index_ok111:
+741 - 41a00004 - addi R13, R0, 4
+742 - 09ad5000 - mul R13, R13, R10
+743 - 01ab6800 - add R13, R11, R13
+744 - 812d0004 - sw R9, 4(R13)
+745 - 412000f0 - addi R9, R0, 240
+746 - 4d43fff8 - lw R10, -8(R3)
+747 - 4d63fff4 - lw R11, -12(R3)
+748 - 4042fff4 - addi R2, R2, -12
+749 - 81220000 - sw R9, 0(R2)
+750 - 81420004 - sw R10, 4(R2)
+751 - 81620008 - sw R11, 8(R2)
+752 - 008a0000 - add R4, R10, R0
+753 - 00ab0000 - add R5, R11, R0
+754 - d7fffd78 - jal func_add64
+755 - 4d220000 - lw R9, 0(R2)
+756 - 4d420004 - lw R10, 4(R2)
+757 - 4d620008 - lw R11, 8(R2)
+758 - 4042000c - addi R2, R2, 12
+759 - 01440000 - add R10, R4, R0
+760 - 4042fff8 - addi R2, R2, -8
+761 - 81220000 - sw R9, 0(R2)
+762 - 81420004 - sw R10, 4(R2)
+763 - 00890000 - add R4, R9, R0
+764 - 00aa0000 - add R5, R10, R0
+765 - d7fffd05 - jal func_print64
+766 - 4d220000 - lw R9, 0(R2)
+767 - 4d420004 - lw R10, 4(R2)
+768 - 40420008 - addi R2, R2, 8
+769 - 01240000 - add R9, R4, R0
+770 - 412000f8 - addi R9, R0, 248
+771 - 4d43fff8 - lw R10, -8(R3)
+772 - 4d63fff4 - lw R11, -12(R3)
+773 - 4042fff4 - addi R2, R2, -12
+774 - 81220000 - sw R9, 0(R2)
+775 - 81420004 - sw R10, 4(R2)
+776 - 81620008 - sw R11, 8(R2)
+777 - 008a0000 - add R4, R10, R0
+778 - 00ab0000 - add R5, R11, R0
+779 - d7fffe41 - jal func_sub64
+780 - 4d220000 - lw R9, 0(R2)
+781 - 4d420004 - lw R10, 4(R2)
+782 - 4d620008 - lw R11, 8(R2)
+783 - 4042000c - addi R2, R2, 12
+784 - 01440000 - add R10, R4, R0
+785 - 4042fff8 - addi R2, R2, -8
+786 - 81220000 - sw R9, 0(R2)
+787 - 81420004 - sw R10, 4(R2)
+788 - 00890000 - add R4, R9, R0
+789 - 00aa0000 - add R5, R10, R0
+790 - d7fffcec - jal func_print64
+791 - 4d220000 - lw R9, 0(R2)
+792 - 4d420004 - lw R10, 4(R2)
+793 - 40420008 - addi R2, R2, 8
+794 - 01240000 - add R9, R4, R0
+795 - 00800000 - add R4, R0, R0
+return_main90:
+796 - 4c23fffc - lw R1, -4(R3)
+797 - 4d230000 - lw R9, 0(R3)
+798 - 40430004 - addi R2, R3, 4
+799 - 00690000 - add R3, R9, R0
+800 - 58010000 - jr R1
+rt_print_str:
+801 - 4042fff8 - addi R2, R2, -8
+802 - 80620004 - sw R3, 4(R2)
+803 - 80220000 - sw R1, 0(R2)
+804 - 40620004 - addi R3, R2, 4
+805 - 01240000 - add R9, R4, R0
+ps_loop113:
+806 - 55490000 - lbu R10, 0(R9)
+807 - c1400003 - beq R10, R0, ps_done114
+808 - 89400001 - out R10, 1
+809 - 41290001 - addi R9, R9, 1
+810 - d3fffffb - jmp ps_loop113
+ps_done114:
+811 - 00800000 - add R4, R0, R0
+812 - 4c23fffc - lw R1, -4(R3)
+813 - 4d230000 - lw R9, 0(R3)
+814 - 40430004 - addi R2, R3, 4
+815 - 00690000 - add R3, R9, R0
+816 - 58010000 - jr R1
+rt_println_str:
+817 - 4042fff8 - addi R2, R2, -8
+818 - 80620004 - sw R3, 4(R2)
+819 - 80220000 - sw R1, 0(R2)
+820 - 40620004 - addi R3, R2, 4
+821 - d7ffffeb - jal rt_print_str
+822 - 4120000a - addi R9, R0, 10
+823 - 89200001 - out R9, 1
+824 - 00800000 - add R4, R0, R0
+825 - 4c23fffc - lw R1, -4(R3)
+826 - 4d230000 - lw R9, 0(R3)
+827 - 40430004 - addi R2, R3, 4
+828 - 00690000 - add R3, R9, R0
+829 - 58010000 - jr R1
+rt_input_int:
+830 - 4042fff8 - addi R2, R2, -8
+831 - 80620004 - sw R3, 4(R2)
+832 - 80220000 - sw R1, 0(R2)
+833 - 40620004 - addi R3, R2, 4
+834 - 41200000 - addi R9, R0, 0
+835 - 41400001 - addi R10, R0, 1
+836 - 4180000a - addi R12, R0, 10
+837 - 41e00000 - addi R15, R0, 0
+838 - 5d600000 - in R11, 0
+839 - 41c0002d - addi R14, R0, 45
+840 - 21cb7000 - seq R14, R11, R14
+841 - c1c00002 - beq R14, R0, ii_notneg117
+842 - 4140ffff - addi R10, R0, -1
+843 - 5d600000 - in R11, 0
+ii_notneg117:
+ii_loop116:
+844 - 41c0000a - addi R14, R0, 10
+845 - 21cb7000 - seq R14, R11, R14
+846 - c5c00022 - bne R14, R0, ii_done115
+847 - 41c0000d - addi R14, R0, 13
+848 - 21cb7000 - seq R14, R11, R14
+849 - c5c0001f - bne R14, R0, ii_done115
+850 - 41c00030 - addi R14, R0, 48
+851 - 1dab7000 - slt R13, R11, R14
+852 - c5a0001a - bne R13, R0, ii_bad118
+853 - 41c0003a - addi R14, R0, 58
+854 - 1dab7000 - slt R13, R11, R14
+855 - c1a00017 - beq R13, R0, ii_bad118
+856 - 41e00001 - addi R15, R0, 1
+857 - 41c00030 - addi R14, R0, 48
+858 - 05ab7000 - sub R13, R11, R14
+859 - 1dc90000 - slt R14, R9, R0
+860 - c5c00013 - bne R14, R0, ii_trap119
+861 - 42000104 - addi R16, R0, 260
+862 - 4e100000 - lw R16, 0(R16)
+863 - 1dd04800 - slt R14, R16, R9
+864 - c5c0000f - bne R14, R0, ii_trap119
+865 - 21c98000 - seq R14, R9, R16
+866 - c1c00008 - beq R14, R0, ii_below_limit120
+867 - 41c00001 - addi R14, R0, 1
+868 - 21ca7000 - seq R14, R10, R14
+869 - c5c00002 - bne R14, R0, ii_positive121
+870 - 41c00008 - addi R14, R0, 8
+871 - d0000001 - jmp ii_threshold122
+ii_positive121:
+872 - 41c00007 - addi R14, R0, 7
+ii_threshold122:
+873 - 1dce6800 - slt R14, R14, R13
+874 - c5c00005 - bne R14, R0, ii_trap119
+ii_below_limit120:
+875 - 09296000 - mul R9, R9, R12
+876 - 01296800 - add R9, R9, R13
+877 - 5d600000 - in R11, 0
+878 - d3ffffdd - jmp ii_loop116
+ii_bad118:
+879 - d0000000 - jmp ii_trap119
+ii_trap119:
+880 - f8000007 - trap 7
+ii_done115:
+881 - c1e0fffe - beq R15, R0, ii_trap119
+882 - 41c00001 - addi R14, R0, 1
+883 - 21ca7000 - seq R14, R10, R14
+884 - c5c00001 - bne R14, R0, ii_pos123
+885 - 05204800 - sub R9, R0, R9
+ii_pos123:
+886 - 00890000 - add R4, R9, R0
+887 - 4c23fffc - lw R1, -4(R3)
+888 - 4d230000 - lw R9, 0(R3)
+889 - 40430004 - addi R2, R3, 4
+890 - 00690000 - add R3, R9, R0
+891 - 58010000 - jr R1
+rt_concat:
+892 - 4042fff8 - addi R2, R2, -8
+893 - 80620004 - sw R3, 4(R2)
+894 - 80220000 - sw R1, 0(R2)
+895 - 40620004 - addi R3, R2, 4
+896 - 01240000 - add R9, R4, R0
+897 - 01450000 - add R10, R5, R0
+898 - 41600000 - addi R11, R0, 0
+899 - 01e90000 - add R15, R9, R0
+cat_l1124:
+900 - 560f0000 - lbu R16, 0(R15)
+901 - c2000003 - beq R16, R0, cat_d1125
+902 - 416b0001 - addi R11, R11, 1
+903 - 41ef0001 - addi R15, R15, 1
+904 - d3fffffb - jmp cat_l1124
+cat_d1125:
+905 - 41800000 - addi R12, R0, 0
+906 - 01ea0000 - add R15, R10, R0
+cat_l2126:
+907 - 560f0000 - lbu R16, 0(R15)
+908 - c2000003 - beq R16, R0, cat_d2127
+909 - 418c0001 - addi R12, R12, 1
+910 - 41ef0001 - addi R15, R15, 1
+911 - d3fffffb - jmp cat_l2126
+cat_d2127:
+912 - 01ab6000 - add R13, R11, R12
+913 - 41ad0001 - addi R13, R13, 1
+914 - 01c80000 - add R14, R8, R0
+915 - 01086800 - add R8, R8, R13
+916 - 42400003 - addi R18, R0, 3
+917 - 01089000 - add R8, R8, R18
+918 - 4660ffff - lui R19, 65535
+919 - 4a73fffc - ori R19, 65532
+920 - 15089800 - and R8, R8, R19
+921 - 1e224000 - slt R17, R2, R8
+922 - c2200001 - beq R17, R0, cat_ok128
+923 - f8000003 - trap 3
+cat_ok128:
+924 - 01ee0000 - add R15, R14, R0
+925 - 02490000 - add R18, R9, R0
+cat_c1129:
+926 - 56120000 - lbu R16, 0(R18)
+927 - c2000004 - beq R16, R0, cat_cd1130
+928 - 860f0000 - sb R16, 0(R15)
+929 - 42520001 - addi R18, R18, 1
+930 - 41ef0001 - addi R15, R15, 1
+931 - d3fffffa - jmp cat_c1129
+cat_cd1130:
+932 - 024a0000 - add R18, R10, R0
+cat_c2131:
+933 - 56120000 - lbu R16, 0(R18)
+934 - c2000004 - beq R16, R0, cat_cd2132
+935 - 860f0000 - sb R16, 0(R15)
+936 - 42520001 - addi R18, R18, 1
+937 - 41ef0001 - addi R15, R15, 1
+938 - d3fffffa - jmp cat_c2131
+cat_cd2132:
+939 - 840f0000 - sb R0, 0(R15)
+940 - 008e0000 - add R4, R14, R0
+941 - 4c23fffc - lw R1, -4(R3)
+942 - 4d230000 - lw R9, 0(R3)
+943 - 40430004 - addi R2, R3, 4
+944 - 00690000 - add R3, R9, R0
+945 - 58010000 - jr R1
+rt_int_to_str:
+946 - 4042fff8 - addi R2, R2, -8
+947 - 80620004 - sw R3, 4(R2)
+948 - 80220000 - sw R1, 0(R2)
+949 - 40620004 - addi R3, R2, 4
+950 - 01240000 - add R9, R4, R0
+951 - 01490000 - add R10, R9, R0
+952 - 41800000 - addi R12, R0, 0
+953 - 41a0000a - addi R13, R0, 10
+954 - 42200000 - addi R17, R0, 0
+955 - 1d690000 - slt R11, R9, R0
+956 - c1600007 - beq R11, R0, its_nonneg133
+957 - 42200001 - addi R17, R0, 1
+958 - 05204800 - sub R9, R0, R9
+959 - 01490000 - add R10, R9, R0
+960 - 42400014 - addi R18, R0, 20
+961 - 4e520000 - lw R18, 0(R18)
+962 - 21699000 - seq R11, R9, R18
+963 - c560002e - bne R11, R0, its_int_min134
+its_nonneg133:
+964 - c5400002 - bne R10, R0, its_count137
+965 - 418c0001 - addi R12, R12, 1
+966 - d0000003 - jmp its_count_done138
+its_count137:
+967 - 418c0001 - addi R12, R12, 1
+968 - 0d4a6800 - div R10, R10, R13
+969 - c540fffd - bne R10, R0, its_count137
+its_count_done138:
+970 - 42400000 - addi R18, R0, 0
+971 - 22510000 - seq R18, R17, R0
+972 - c6400001 - bne R18, R0, its_no_sign142
+973 - 418c0001 - addi R12, R12, 1
+its_no_sign142:
+974 - 416c0001 - addi R11, R12, 1
+975 - 02080000 - add R16, R8, R0
+976 - 01085800 - add R8, R8, R11
+977 - 41400003 - addi R10, R0, 3
+978 - 01085000 - add R8, R8, R10
+979 - 4540ffff - lui R10, 65535
+980 - 494afffc - ori R10, 65532
+981 - 15085000 - and R8, R8, R10
+982 - 01f00000 - add R15, R16, R0
+983 - 01ef6000 - add R15, R15, R12
+984 - 840f0000 - sb R0, 0(R15)
+985 - 41600000 - addi R11, R0, 0
+986 - 21715800 - seq R11, R17, R11
+987 - c5600003 - bne R11, R0, its_fill_digits139
+988 - 4160002d - addi R11, R0, 45
+989 - 01f00000 - add R15, R16, R0
+990 - 856f0000 - sb R11, 0(R15)
+its_fill_digits139:
+991 - 01f00000 - add R15, R16, R0
+992 - 01ef6000 - add R15, R15, R12
+993 - 41efffff - addi R15, R15, -1
+994 - 41600000 - addi R11, R0, 0
+995 - 21695800 - seq R11, R9, R11
+996 - c1600004 - beq R11, R0, its_fill140
+997 - 41600030 - addi R11, R0, 48
+998 - 01f00000 - add R15, R16, R0
+999 - 856f0000 - sb R11, 0(R15)
+1000 - d0000019 - jmp its_fill_done141
+its_fill140:
+1001 - 1d604800 - slt R11, R0, R9
+1002 - c1600017 - beq R11, R0, its_fill_done141
+1003 - 11c96800 - mod R14, R9, R13
+1004 - 41600030 - addi R11, R0, 48
+1005 - 016b7000 - add R11, R11, R14
+1006 - 856f0000 - sb R11, 0(R15)
+1007 - 41efffff - addi R15, R15, -1
+1008 - 0d296800 - div R9, R9, R13
+1009 - d3fffff7 - jmp its_fill140
+its_int_min134:
+1010 - 02080000 - add R16, R8, R0
+1011 - 4160000c - addi R11, R0, 12
+1012 - 01085800 - add R8, R8, R11
+1013 - 4160002d - addi R11, R0, 45
+1014 - 85700000 - sb R11, 0(R16)
+1015 - 41400018 - addi R10, R0, 24
+1016 - 01f00000 - add R15, R16, R0
+1017 - 41ef0001 - addi R15, R15, 1
+its_min_copy135:
+1018 - 556a0000 - lbu R11, 0(R10)
+1019 - c1600004 - beq R11, R0, its_min_copy_done136
+1020 - 856f0000 - sb R11, 0(R15)
+1021 - 414a0001 - addi R10, R10, 1
+1022 - 41ef0001 - addi R15, R15, 1
+1023 - d3fffffa - jmp its_min_copy135
+its_min_copy_done136:
+1024 - 840f0000 - sb R0, 0(R15)
+1025 - d0000000 - jmp its_fill_done141
+its_fill_done141:
+1026 - 00900000 - add R4, R16, R0
+1027 - 4c23fffc - lw R1, -4(R3)
+1028 - 4d230000 - lw R9, 0(R3)
+1029 - 40430004 - addi R2, R3, 4
+1030 - 00690000 - add R3, R9, R0
+1031 - 58010000 - jr R1
