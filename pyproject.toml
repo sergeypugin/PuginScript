@@ -38,7 +38,7 @@ line-length = 120
 # ruff знает про ленивые аннотации
 # и не ругается на forward-ссылки
 target-version = "py314"
-extend-exclude = ["_tmp_*.py"]
+extend-exclude = ["_tmp_*.py", "build"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "W"]

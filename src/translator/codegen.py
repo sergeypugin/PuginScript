@@ -1,8 +1,8 @@
 """Кодогенерация PuginScript: из Program + SemResult в инструкции ISA и статику.
 
 Возвращает пару (static_bytes, code_instructions):
-  - static_bytes -- байтовый образ секции данных (Little Endian, слово 0 = 0)
-  - code_instructions -- список Instruction для памяти команд (PC = 0)
+- static_bytes -- байтовый образ секции данных (Little Endian, слово 0 = 0)
+- code_instructions -- список Instruction для памяти команд (PC = 0)
 
 Следует соглашению из docs/ISA.md:
 - R0 -- ноль
